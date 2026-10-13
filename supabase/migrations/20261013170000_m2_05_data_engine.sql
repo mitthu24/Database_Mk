@@ -205,7 +205,7 @@ begin
     elsif t = 'date' then
       if jsonb_typeof(v) <> 'string' then return v_label || ' must be a date (YYYY-MM-DD)'; end if;
       s := v #>> '{}';
-      if s !~ '^\d{4}-\d{2}-\d{2}$' then return v_label || ' must be a date (YYYY-MM-DD)'; end if;
+      if s !~ '^[0-9]{4}-[0-9]{2}-[0-9]{2}$' then return v_label || ' must be a date (YYYY-MM-DD)'; end if;
       begin
         if to_char(s::date, 'YYYY-MM-DD') <> s then return v_label || ' is not a real calendar date'; end if;
       exception when others then
@@ -214,10 +214,16 @@ begin
     elsif t = 'datetime' then
       if jsonb_typeof(v) <> 'string' then return v_label || ' must be a date and time (ISO 8601)'; end if;
       s := v #>> '{}';
-      if s !~ '^\d{4}-\d{2}-\d{2}[T ]\d{2}:\d{2}(:\d{2}(\.\d+)?)?(Z|[+-]\d{2}(:?\d{2})?)?$' then
+      -- strict ASCII pattern with real ranges (hour 00-23, minute/second 00-59); the
+      -- TypeScript mirror uses the identical expression. [0-9] (not \d) so non-ASCII
+      -- digits are never accepted.
+      if s !~ '^[0-9]{4}-[0-9]{2}-[0-9]{2}[T ]([01][0-9]|2[0-3]):[0-5][0-9](:[0-5][0-9](\.[0-9]+)?)?(Z|[+-]([01][0-9]|2[0-3])(:?[0-5][0-9])?)?$' then
         return v_label || ' must be a date and time (ISO 8601)';
       end if;
       begin
+        if to_char(left(s, 10)::date, 'YYYY-MM-DD') <> left(s, 10) then
+          return v_label || ' is not a real date and time';
+        end if;
         perform s::timestamptz;
       exception when others then
         return v_label || ' is not a real date and time';

@@ -1,0 +1,176 @@
+[
+    {
+        "id": "00000000-0000-4000-8000-000000000001",
+        "mode": "append",
+        "status": "failed",
+        "table_id": "00000000-0000-4000-8000-000000000002",
+        "file_name": "bad.csv",
+        "created_at": "2026-01-01T00:00:00+00:00",
+        "created_by": "00000000-0000-4000-8000-000000000003",
+        "table_name": "Contract Table",
+        "rows_deleted": 0,
+        "error_summary": {
+            "errors": [
+                {
+                    "row": 2,
+                    "message": "unknown column \"nope\""
+                }
+            ],
+            "error_count": 1
+        },
+        "rows_inserted": 0,
+        "rows_received": 2
+    },
+    {
+        "id": "00000000-0000-4000-8000-000000000004",
+        "mode": "append",
+        "status": "succeeded",
+        "table_id": "00000000-0000-4000-8000-000000000002",
+        "file_name": "ok.csv",
+        "created_at": "2026-01-01T00:00:00+00:00",
+        "created_by": "00000000-0000-4000-8000-000000000003",
+        "table_name": "Contract Table",
+        "rows_deleted": 0,
+        "error_summary": {
+        },
+        "rows_inserted": 2,
+        "rows_received": 2
+    },
+    {
+        "id": "00000000-0000-4000-8000-000000000005",
+        "mode": "append",
+        "status": "failed",
+        "table_id": "00000000-0000-4000-8000-000000000006",
+        "file_name": null,
+        "created_at": "2026-01-01T00:00:00+00:00",
+        "created_by": "00000000-0000-4000-8000-000000000003",
+        "table_name": "Inventory",
+        "rows_deleted": 0,
+        "error_summary": {
+            "errors": [
+                {
+                    "row": 0,
+                    "message": "too many rows (maximum 50000 per import)"
+                }
+            ],
+            "error_count": 1
+        },
+        "rows_inserted": 0,
+        "rows_received": 50001
+    },
+    {
+        "id": "00000000-0000-4000-8000-000000000007",
+        "mode": "append",
+        "status": "succeeded",
+        "table_id": "00000000-0000-4000-8000-000000000006",
+        "file_name": "v.csv",
+        "created_at": "2026-01-01T00:00:00+00:00",
+        "created_by": "00000000-0000-4000-8000-000000000008",
+        "table_name": "Inventory",
+        "rows_deleted": 0,
+        "error_summary": {
+        },
+        "rows_inserted": 1,
+        "rows_received": 1
+    },
+    {
+        "id": "00000000-0000-4000-8000-000000000009",
+        "mode": "replace",
+        "status": "succeeded",
+        "table_id": "00000000-0000-4000-8000-000000000006",
+        "file_name": "good.csv",
+        "created_at": "2026-01-01T00:00:00+00:00",
+        "created_by": "00000000-0000-4000-8000-000000000003",
+        "table_name": "Inventory",
+        "rows_deleted": 32,
+        "error_summary": {
+        },
+        "rows_inserted": 3,
+        "rows_received": 3
+    },
+    {
+        "id": "00000000-0000-4000-8000-000000000010",
+        "mode": "replace",
+        "status": "failed",
+        "table_id": "00000000-0000-4000-8000-000000000006",
+        "file_name": "bad-replace.csv",
+        "created_at": "2026-01-01T00:00:00+00:00",
+        "created_by": "00000000-0000-4000-8000-000000000003",
+        "table_name": "Inventory",
+        "rows_deleted": 0,
+        "error_summary": {
+            "errors": [
+                {
+                    "row": 2,
+                    "message": "SKU is required"
+                }
+            ],
+            "error_count": 1
+        },
+        "rows_inserted": 0,
+        "rows_received": 2
+    },
+    {
+        "id": "00000000-0000-4000-8000-000000000011",
+        "mode": "append",
+        "status": "failed",
+        "table_id": "00000000-0000-4000-8000-000000000006",
+        "file_name": null,
+        "created_at": "2026-01-01T00:00:00+00:00",
+        "created_by": "00000000-0000-4000-8000-000000000003",
+        "table_name": "Inventory",
+        "rows_deleted": 0,
+        "error_summary": {
+            "errors": [
+                {
+                    "row": 0,
+                    "message": "the file contains no data rows"
+                }
+            ],
+            "error_count": 1
+        },
+        "rows_inserted": 0,
+        "rows_received": 0
+    },
+    {
+        "id": "00000000-0000-4000-8000-000000000012",
+        "mode": "append",
+        "status": "failed",
+        "table_id": "00000000-0000-4000-8000-000000000006",
+        "file_name": "bad.csv",
+        "created_at": "2026-01-01T00:00:00+00:00",
+        "created_by": "00000000-0000-4000-8000-000000000003",
+        "table_name": "Inventory",
+        "rows_deleted": 0,
+        "error_summary": {
+            "errors": [
+                {
+                    "row": 2,
+                    "message": "SKU is required"
+                },
+                {
+                    "row": 3,
+                    "message": "Qty must be a number"
+                }
+            ],
+            "error_count": 2
+        },
+        "rows_inserted": 0,
+        "rows_received": 3
+    },
+    {
+        "id": "00000000-0000-4000-8000-000000000013",
+        "mode": "append",
+        "status": "succeeded",
+        "table_id": "00000000-0000-4000-8000-000000000006",
+        "file_name": "a.csv",
+        "created_at": "2026-01-01T00:00:00+00:00",
+        "created_by": "00000000-0000-4000-8000-000000000003",
+        "table_name": "Inventory",
+        "rows_deleted": 0,
+        "error_summary": {
+        },
+        "rows_inserted": 3,
+        "rows_received": 3
+    }
+]

@@ -1,0 +1,35 @@
+[
+    {
+        "user_id": "00000000-0000-4000-8000-000000000001",
+        "can_edit": false,
+        "can_view": true,
+        "table_id": "00000000-0000-4000-8000-000000000002",
+        "can_create": false,
+        "can_delete": false,
+        "can_export": false,
+        "can_import": false,
+        "table_name": "Orders"
+    },
+    {
+        "user_id": "00000000-0000-4000-8000-000000000003",
+        "can_edit": false,
+        "can_view": true,
+        "table_id": "00000000-0000-4000-8000-000000000002",
+        "can_create": false,
+        "can_delete": false,
+        "can_export": true,
+        "can_import": false,
+        "table_name": "Orders"
+    },
+    {
+        "user_id": "00000000-0000-4000-8000-000000000004",
+        "can_edit": true,
+        "can_view": true,
+        "table_id": "00000000-0000-4000-8000-000000000002",
+        "can_create": true,
+        "can_delete": true,
+        "can_export": false,
+        "can_import": false,
+        "table_name": "Orders"
+    }
+]

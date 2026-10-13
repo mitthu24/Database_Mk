@@ -1,0 +1,49 @@
+{
+    "rows": [
+        {
+            "id": "00000000-0000-4000-8000-000000000001",
+            "name": "Newly Provisioned Co",
+            "plan": "trial",
+            "access": "full",
+            "status": "active",
+            "tables": 0,
+            "members": 1,
+            "created_at": "2026-01-01T00:00:00+00:00",
+            "admin_email": "newadmin@test.local",
+            "trial_ends_at": "2026-01-01T00:00:00+00:00",
+            "current_period_end": null,
+            "subscription_status": "trialing"
+        },
+        {
+            "id": "00000000-0000-4000-8000-000000000002",
+            "name": "Birch Veneer",
+            "plan": "trial",
+            "access": "full",
+            "status": "active",
+            "tables": 1,
+            "members": 2,
+            "created_at": "2026-01-01T00:00:00+00:00",
+            "admin_email": "admin.b@test.local",
+            "trial_ends_at": "2026-01-01T00:00:00+00:00",
+            "current_period_end": null,
+            "subscription_status": "trialing"
+        },
+        {
+            "id": "00000000-0000-4000-8000-000000000003",
+            "name": "Acme Plywood Ltd",
+            "plan": "trial",
+            "access": "full",
+            "status": "active",
+            "tables": 3,
+            "members": 7,
+            "created_at": "2026-01-01T00:00:00+00:00",
+            "admin_email": "admin.a@test.local",
+            "trial_ends_at": "2026-01-01T00:00:00+00:00",
+            "current_period_end": null,
+            "subscription_status": "trialing"
+        }
+    ],
+    "limit": 5,
+    "total": 3,
+    "offset": 0
+}

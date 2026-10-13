@@ -1,0 +1,16 @@
+
+
+{
+    "plan": "trial",
+    "role": "employee",
+    "access": "full",
+    "user_id": "00000000-0000-4000-8000-000000000001",
+    "company_id": "00000000-0000-4000-8000-000000000002",
+    "is_founder": false,
+    "company_name": "Acme Plywood Ltd",
+    "member_status": "active",
+    "trial_ends_at": "2026-01-01T00:00:00+00:00",
+    "company_status": "active",
+    "current_period_end": null,
+    "subscription_status": "trialing"
+}

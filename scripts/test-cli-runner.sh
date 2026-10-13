@@ -25,7 +25,7 @@ trap cleanup EXIT
 fail() { echo "FAILED: $*" >&2; exit 1; }
 ok() { echo "   PASS: $*"; }
 
-"${RUN[@]}" "${PGBIN}/initdb" -D "${WORK}/data" -A trust -U postgres >/dev/null
+"${RUN[@]}" "${PGBIN}/initdb" -D "${WORK}/data" -A trust -U postgres -E UTF8 --locale=C.UTF-8 >/dev/null
 "${RUN[@]}" "${PGBIN}/pg_ctl" -D "${WORK}/data" -w -l "${WORK}/pg.log" \
   -o "-c listen_addresses=127.0.0.1 -p ${PORT} -k ${WORK} -c fsync=off" start >/dev/null
 P=("${PGBIN}/psql" -X -q -h 127.0.0.1 -p "${PORT}" -U postgres -v ON_ERROR_STOP=1 -v root="${ROOT}")

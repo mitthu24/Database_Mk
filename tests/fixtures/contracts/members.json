@@ -1,0 +1,79 @@
+[
+    {
+        "id": "00000000-0000-4000-8000-000000000001",
+        "role": "admin",
+        "email": "admin.a@test.local",
+        "status": "active",
+        "user_id": "00000000-0000-4000-8000-000000000002",
+        "full_name": "Alice Still Editable",
+        "created_at": "2026-01-01T00:00:00+00:00",
+        "employee_code": null,
+        "tables_with_access": 0
+    },
+    {
+        "id": "00000000-0000-4000-8000-000000000003",
+        "role": "employee",
+        "email": "viewer.a@test.local",
+        "status": "active",
+        "user_id": "00000000-0000-4000-8000-000000000004",
+        "full_name": "Vic Viewer",
+        "created_at": "2026-01-01T00:00:00+00:00",
+        "employee_code": "EMP-002",
+        "tables_with_access": 1
+    },
+    {
+        "id": "00000000-0000-4000-8000-000000000005",
+        "role": "employee",
+        "email": "nogrant.a@test.local",
+        "status": "active",
+        "user_id": "00000000-0000-4000-8000-000000000006",
+        "full_name": "Nora NoGrant",
+        "created_at": "2026-01-01T00:00:00+00:00",
+        "employee_code": "EMP-003",
+        "tables_with_access": 0
+    },
+    {
+        "id": "00000000-0000-4000-8000-000000000007",
+        "role": "employee",
+        "email": "editor.a@test.local",
+        "status": "active",
+        "user_id": "00000000-0000-4000-8000-000000000008",
+        "full_name": "Edie E.",
+        "created_at": "2026-01-01T00:00:00+00:00",
+        "employee_code": "EMP-001",
+        "tables_with_access": 1
+    },
+    {
+        "id": "00000000-0000-4000-8000-000000000009",
+        "role": "employee",
+        "email": "exporter.a@test.local",
+        "status": "active",
+        "user_id": "00000000-0000-4000-8000-000000000010",
+        "full_name": "Xavier Export",
+        "created_at": "2026-01-01T00:00:00+00:00",
+        "employee_code": "EMP-004",
+        "tables_with_access": 1
+    },
+    {
+        "id": "00000000-0000-4000-8000-000000000011",
+        "role": "employee",
+        "email": "invitee1@test.local",
+        "status": "disabled",
+        "user_id": "00000000-0000-4000-8000-000000000012",
+        "full_name": "Ivy Invitee",
+        "created_at": "2026-01-01T00:00:00+00:00",
+        "employee_code": "EMP-777",
+        "tables_with_access": 0
+    },
+    {
+        "id": "00000000-0000-4000-8000-000000000013",
+        "role": "employee",
+        "email": "invitee3@test.local",
+        "status": "active",
+        "user_id": "00000000-0000-4000-8000-000000000014",
+        "full_name": "Ian Invitee",
+        "created_at": "2026-01-01T00:00:00+00:00",
+        "employee_code": "CUSTOM-9",
+        "tables_with_access": 0
+    }
+]

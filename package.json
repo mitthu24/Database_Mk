@@ -10,7 +10,8 @@
     "typecheck": "next typegen && tsc --noEmit",
     "test": "vitest run",
     "test:db": "bash scripts/test-db.sh",
-    "test:cli-runner": "bash scripts/test-cli-runner.sh"
+    "test:cli-runner": "bash scripts/test-cli-runner.sh",
+    "capture:contracts": "bash scripts/capture-contracts.sh"
   },
   "dependencies": {
     "@radix-ui/react-alert-dialog": "^1.2.1",

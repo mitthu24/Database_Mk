@@ -1,0 +1,56 @@
+[
+    {
+        "id": "00000000-0000-4000-8000-000000000001",
+        "name": "Orders",
+        "access": {
+            "edit": true,
+            "view": true,
+            "create": true,
+            "delete": true,
+            "export": true,
+            "import": true,
+            "manage": true
+        },
+        "columns": [
+            {
+                "key": "sku",
+                "type": "text",
+                "label": "SKU",
+                "required": true
+            },
+            {
+                "key": "qty",
+                "type": "number",
+                "label": "Quantity"
+            }
+        ],
+        "row_count": 3,
+        "created_at": "2026-01-01T00:00:00+00:00",
+        "updated_at": "2026-01-01T00:00:00+00:00",
+        "data_updated_at": "2026-01-01T00:00:00+00:00"
+    },
+    {
+        "id": "00000000-0000-4000-8000-000000000002",
+        "name": "Vendors",
+        "access": {
+            "edit": true,
+            "view": true,
+            "create": true,
+            "delete": true,
+            "export": true,
+            "import": true,
+            "manage": true
+        },
+        "columns": [
+            {
+                "key": "name",
+                "type": "text",
+                "label": "Name"
+            }
+        ],
+        "row_count": 1,
+        "created_at": "2026-01-01T00:00:00+00:00",
+        "updated_at": "2026-01-01T00:00:00+00:00",
+        "data_updated_at": "2026-01-01T00:00:00+00:00"
+    }
+]

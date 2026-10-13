@@ -1,0 +1,16 @@
+
+
+{
+    "plan": null,
+    "role": null,
+    "access": "none",
+    "user_id": "00000000-0000-4000-8000-000000000001",
+    "company_id": null,
+    "is_founder": true,
+    "company_name": null,
+    "member_status": null,
+    "trial_ends_at": null,
+    "company_status": null,
+    "current_period_end": null,
+    "subscription_status": null
+}

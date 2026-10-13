@@ -28,7 +28,7 @@ cleanup() {
 }
 trap cleanup EXIT
 
-"${RUN[@]}" "${PGBIN}/initdb" -D "${WORK}/data" -A trust -U postgres >/dev/null
+"${RUN[@]}" "${PGBIN}/initdb" -D "${WORK}/data" -A trust -U postgres -E UTF8 --locale=C.UTF-8 >/dev/null
 "${RUN[@]}" "${PGBIN}/pg_ctl" -D "${WORK}/data" -w -l "${WORK}/pg.log" \
   -o "-c listen_addresses='' -k ${WORK} -c fsync=off" start >/dev/null
 

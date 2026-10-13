@@ -1,0 +1,11 @@
+{
+    "ok": false,
+    "errors": [
+        {
+            "row": 2,
+            "message": "unknown column \"nope\""
+        }
+    ],
+    "job_id": "00000000-0000-4000-8000-000000000001",
+    "error_count": 1
+}

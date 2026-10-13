@@ -1,0 +1,14 @@
+{
+    "id": "00000000-0000-4000-8000-000000000001",
+    "note": null,
+    "amount": 1.00,
+    "method": "Bank",
+    "months": 1,
+    "status": "rejected",
+    "currency": "USD",
+    "reference": "REF-1005",
+    "company_id": "00000000-0000-4000-8000-000000000002",
+    "created_at": "2026-01-01T00:00:00+00:00",
+    "review_note": "contract capture",
+    "reviewed_at": "2026-01-01T00:00:00+00:00"
+}
