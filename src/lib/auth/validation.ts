@@ -36,6 +36,23 @@ export const companySchema = z.object({
   companyName: personName,
 });
 
+export const profileNameSchema = z.object({
+  fullName: personName,
+});
+
+const optionalText = (max: number, message: string) =>
+  z.preprocess(
+    (v) => (v === null || v === undefined ? "" : v),
+    z.string().trim().max(max, message),
+  );
+
+export const companyProfileSchema = z.object({
+  name: personName,
+  contactEmail: z.preprocess((v) => (v === null || v === undefined ? "" : v), z.union([email, z.literal("")])),
+  phone: optionalText(40, "Use at most 40 characters."),
+  address: optionalText(500, "Use at most 500 characters."),
+});
+
 export const changePasswordSchema = z
   .object({
     currentPassword: z.string().min(1, "Enter your current password.").max(72),
@@ -49,6 +66,16 @@ export const changePasswordSchema = z
   .refine((v) => v.newPassword !== v.currentPassword, {
     path: ["newPassword"],
     message: "Choose a password different from the current one.",
+  });
+
+export const resetPasswordSchema = z
+  .object({
+    newPassword,
+    confirmPassword: z.string(),
+  })
+  .refine((v) => v.newPassword === v.confirmPassword, {
+    path: ["confirmPassword"],
+    message: "Passwords do not match.",
   });
 
 export const employeeSchema = z.object({

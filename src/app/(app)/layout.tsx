@@ -32,8 +32,13 @@ async function AppFrame({ children }: { children: React.ReactNode }) {
                 <Link href="/founder">Founder</Link>
               </Button>
             ) : null}
+            {!ctx.isFounder && ctx.companyId ? (
+              <Button asChild variant="ghost" size="sm">
+                <Link href="/company">Company</Link>
+              </Button>
+            ) : null}
             <Button asChild variant="ghost" size="sm">
-              <Link href="/account/password">Password</Link>
+              <Link href="/account">Account</Link>
             </Button>
             <form action={signOut}>
               <Button type="submit" variant="outline" size="sm" title={user?.email ?? undefined}>

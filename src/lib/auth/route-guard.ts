@@ -2,7 +2,7 @@
 // only (cookie/claims based). Real authorization happens in the data access
 // layer (src/lib/auth/dal.ts) and in Postgres RLS.
 
-export const PROTECTED_PREFIXES = ["/dashboard", "/founder", "/account", "/onboarding"] as const;
+export const PROTECTED_PREFIXES = ["/dashboard", "/founder", "/account", "/onboarding", "/company"] as const;
 export const AUTH_PAGES = ["/login", "/register"] as const;
 
 export type GuardDecision =

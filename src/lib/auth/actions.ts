@@ -11,6 +11,7 @@ import {
   friendlyAuthError,
   loginSchema,
   registerSchema,
+  resetPasswordSchema,
   safeNextPath,
   type ActionState,
 } from "@/lib/auth/validation";
@@ -175,7 +176,7 @@ export async function requestPasswordReset(_prev: ActionState | undefined, formD
 }
 
 export async function resetPassword(_prev: ActionState | undefined, formData: FormData): Promise<ActionState> {
-  const parsed = changePasswordSchema.pick({ newPassword: true, confirmPassword: true }).safeParse({
+  const parsed = resetPasswordSchema.safeParse({
     newPassword: formData.get("newPassword"),
     confirmPassword: formData.get("confirmPassword"),
   });

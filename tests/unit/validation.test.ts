@@ -2,10 +2,13 @@ import { describe, expect, it } from "vitest";
 
 import {
   changePasswordSchema,
+  companyProfileSchema,
   employeeSchema,
   friendlyAuthError,
   loginSchema,
+  profileNameSchema,
   registerSchema,
+  resetPasswordSchema,
   safeNextPath,
 } from "@/lib/auth/validation";
 
@@ -123,6 +126,35 @@ describe("employeeSchema", () => {
   it("validates employee codes", () => {
     expect(employeeSchema.safeParse({ email: "e@x.co", fullName: "Ab", employeeCode: "EMP-001" }).success).toBe(true);
     expect(employeeSchema.safeParse({ email: "e@x.co", fullName: "Ab", employeeCode: "bad code!" }).success).toBe(false);
+  });
+});
+
+describe("resetPasswordSchema", () => {
+  it("requires matching, sufficiently long passwords", () => {
+    expect(resetPasswordSchema.safeParse({ newPassword: "longenough1", confirmPassword: "longenough1" }).success).toBe(true);
+    expect(resetPasswordSchema.safeParse({ newPassword: "longenough1", confirmPassword: "nope" }).success).toBe(false);
+    expect(resetPasswordSchema.safeParse({ newPassword: "short", confirmPassword: "short" }).success).toBe(false);
+  });
+});
+
+describe("profileNameSchema", () => {
+  it("trims and bounds the name", () => {
+    expect(profileNameSchema.safeParse({ fullName: "  Jo  " }).success).toBe(true);
+    expect(profileNameSchema.safeParse({ fullName: "J" }).success).toBe(false);
+    expect(profileNameSchema.safeParse({ fullName: "x".repeat(121) }).success).toBe(false);
+  });
+});
+
+describe("companyProfileSchema", () => {
+  it("allows an empty contact email but validates a non-empty one", () => {
+    expect(companyProfileSchema.safeParse({ name: "Acme Plywood", contactEmail: "", phone: "", address: "" }).success).toBe(true);
+    expect(companyProfileSchema.safeParse({ name: "Acme Plywood", contactEmail: "not-an-email", phone: "", address: "" }).success).toBe(false);
+    expect(companyProfileSchema.safeParse({ name: "Acme Plywood", contactEmail: "ok@acme.test", phone: "+1 555", address: "1 Mill Rd" }).success).toBe(true);
+  });
+  it("rejects an overlong name, phone or address", () => {
+    expect(companyProfileSchema.safeParse({ name: "x".repeat(121), contactEmail: "" }).success).toBe(false);
+    expect(companyProfileSchema.safeParse({ name: "Acme", contactEmail: "", phone: "1".repeat(41) }).success).toBe(false);
+    expect(companyProfileSchema.safeParse({ name: "Acme", contactEmail: "", address: "x".repeat(501) }).success).toBe(false);
   });
 });
 
