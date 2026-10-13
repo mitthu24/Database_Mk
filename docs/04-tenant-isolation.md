@@ -1,5 +1,13 @@
 # Tenant Isolation & Row Level Security Rules
 
+> **M1 update:** the helper functions below are implemented in the `private`
+> schema (not API-exposed) with `search_path = ''`, restricted `EXECUTE`, and
+> two additions (`company_can_read`, `company_can_write`) that enforce
+> suspension and expired-trial read-only mode. The founder has **no** access to
+> customer data tables. The SQL in the migrations and the behaviour documented
+> in `m1-implementation-notes.md` supersede the sketches here; the isolation
+> properties are asserted by `npm run test:db`.
+
 ## Principles
 
 1. Every tenant-scoped table carries a `company_id` column, even where it

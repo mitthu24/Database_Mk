@@ -4,6 +4,15 @@
 > inspect the live project (`evgwjbyrmuljrccgtedi`) via Supabase MCP/CLI once
 > that connection is available, and reconcile this design against whatever
 > already exists there.
+>
+> **M1 update:** the design below was adapted when the migrations were written
+> (`supabase/migrations/20261013160*`). Differences: trial/plan dates live in
+> `subscriptions` only (not `companies`); `import_jobs` and `manual_payments`
+> are deferred to M4/M6; `data_permissions` has per-operation flags (view,
+> create, edit, delete, import, export); one company per user; composite
+> foreign keys enforce tenant consistency. The migrations and
+> `m1-implementation-notes.md` are authoritative where they differ from the
+> sketch below.
 
 ## Storage model decision: metadata + JSONB rows (hybrid)
 

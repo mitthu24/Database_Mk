@@ -49,10 +49,17 @@ This repository currently has the foundation in place (M0 in
 ## Scripts
 
 ```bash
-npm run dev     # start dev server
-npm run build   # production build
-npm run lint     # eslint
+npm run dev        # start dev server
+npm run build      # production build
+npm run lint       # eslint
+npm run typecheck  # tsc --noEmit
+npm test           # unit tests (Vitest)
+npm run test:db    # RLS/SQL tests on a throwaway local PostgreSQL (needs postgres server binaries)
 ```
+
+M1 (auth + multi-tenant database foundation) is prepared but **not applied** to
+any Supabase project. Start with
+[`docs/m1-implementation-notes.md`](./docs/m1-implementation-notes.md).
 
 ## Environment variables
 

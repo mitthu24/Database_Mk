@@ -1,16 +1,24 @@
 import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
 
-export async function updateSession(request: NextRequest) {
-  let supabaseResponse = NextResponse.next({ request });
+export type SessionRefresh = {
+  response: NextResponse;
+  isAuthenticated: boolean;
+  supabaseConfigured: boolean;
+};
+
+// Refreshes the Supabase session cookies on every matched request.
+// isAuthenticated is an OPTIMISTIC signal (verified JWT claims) used only for
+// redirects in src/proxy.ts; it is not an authorization decision.
+export async function updateSession(request: NextRequest): Promise<SessionRefresh> {
+  let response = NextResponse.next({ request });
 
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
   const anonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
   if (!url || !anonKey) {
-    // Not configured yet — let requests through unauthenticated rather than
-    // crashing, so e.g. /setup can report this instead of a 500.
-    return supabaseResponse;
+    // Not configured yet: let public pages (e.g. /setup) render instead of crashing.
+    return { response, isAuthenticated: false, supabaseConfigured: false };
   }
 
   const supabase = createServerClient(url, anonKey, {
@@ -20,17 +28,19 @@ export async function updateSession(request: NextRequest) {
       },
       setAll(cookiesToSet) {
         cookiesToSet.forEach(({ name, value }) => request.cookies.set(name, value));
-        supabaseResponse = NextResponse.next({ request });
+        response = NextResponse.next({ request });
         cookiesToSet.forEach(({ name, value, options }) =>
-          supabaseResponse.cookies.set(name, value, options),
+          response.cookies.set(name, value, options),
         );
       },
     },
   });
 
-  // Refreshes the session if expired. Required for Server Components,
-  // which cannot write cookies themselves.
-  await supabase.auth.getUser();
+  const { data } = await supabase.auth.getClaims();
 
-  return supabaseResponse;
+  return {
+    response,
+    isAuthenticated: Boolean(data?.claims?.sub),
+    supabaseConfigured: true,
+  };
 }

@@ -9,6 +9,11 @@
   and correctly reports missing env vars when unset.
 
 ## M1 — Supabase connected + core schema
+
+> **Status:** migrations, rollback, auth code and tests are written and pass
+> locally (see `m1-implementation-notes.md`). **Not complete:** the live
+> Supabase project was unreachable, so the live schema review, applying the
+> migrations, and founder creation are still pending and need approval.
 - Supabase MCP/CLI connected; live project inspected.
 - Migrations for `profiles`, `companies`, `company_members`, `founders`
   applied to a dev project, with RLS policies from `04-tenant-isolation.md`.

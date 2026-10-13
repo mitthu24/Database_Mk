@@ -29,8 +29,12 @@ Supabase Postgres  — RLS evaluates auth.uid() + company_members on every query
 Two Supabase clients are used (see `src/lib/supabase/`):
 - **Browser client** (`client.ts`) — anon key only, used in client components
   for session-aware reads where RLS is sufficient on its own.
-- **Server client** (`server.ts`, `middleware.ts`) — anon key, but running
-  server-side with the user's cookies, used in Server Components/Actions.
+- **Server client** (`server.ts`, and `middleware.ts` which is called from
+  `src/proxy.ts` — Next.js 16 renamed the Middleware convention to Proxy) —
+  anon key, running server-side with the user's cookies, used in Server
+  Components/Actions. The proxy only refreshes the session and makes
+  optimistic redirects; authorization lives in the data access layer
+  (`src/lib/auth/dal.ts`) and in RLS. See `m1-implementation-notes.md`.
 - A **service-role client** (server-only, never imported into any file that
   ships to the browser) is reserved for the narrow set of operations RLS
   cannot express itself, e.g. founder-only cross-tenant provisioning. Every
