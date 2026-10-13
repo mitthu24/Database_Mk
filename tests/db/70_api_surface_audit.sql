@@ -6,7 +6,8 @@ select test.ok(
     select 1 from pg_class c join pg_namespace n on n.oid = c.relnamespace
     where n.nspname = 'public' and c.relkind = 'r'
       and c.relname in ('profiles','founders','companies','company_members','subscriptions',
-                        'table_metadata','data_permissions','data_rows','audit_logs')
+                        'table_metadata','data_permissions','data_rows','audit_logs',
+                        'import_jobs','platform_settings','manual_payments')
       and not c.relrowsecurity),
   'RLS is enabled on every M1 table');
 
@@ -16,7 +17,8 @@ select test.ok(
     select 1 from information_schema.role_table_grants g
     where g.grantee = 'anon' and g.table_schema = 'public'
       and g.table_name in ('profiles','founders','companies','company_members','subscriptions',
-                           'table_metadata','data_permissions','data_rows','audit_logs')),
+                           'table_metadata','data_permissions','data_rows','audit_logs',
+                           'import_jobs','platform_settings','manual_payments')),
   'anon holds no privileges on any M1 table');
 
 -- no table-level write privilege on protected tables for authenticated
@@ -93,11 +95,12 @@ select test.throws($$update public.audit_logs set action = 'tampered'$$, '42501'
 select test.throws($$delete from public.audit_logs$$, '42501', 'audit_logs DELETE blocked even for superuser');
 select test.throws($$truncate public.audit_logs$$, '42501', 'audit_logs TRUNCATE blocked even for superuser');
 
--- service_role (trusted server) can append to audit_logs but not alter or read founders
+-- service_role (trusted server) cannot touch the audit log at all: audit rows are written
+-- only by SECURITY DEFINER functions that run on behalf of an authorized user
 select test.service();
-select test.ok(test.affected($$insert into public.audit_logs (action, metadata) values ('employee.provisioned', '{}')$$) = 1,
-  'service_role can append audit events');
+select test.throws($$insert into public.audit_logs (action, metadata) values ('forged', '{}')$$, '42501', 'service_role cannot forge audit events');
 select test.throws($$update public.audit_logs set action = 'x'$$, '42501', 'service_role cannot update audit logs');
+select test.throws('select 1 from public.audit_logs', '42501', 'service_role cannot read audit logs');
 select test.logout();
 
 -- helper functions work without recursion for every role that evaluates policies
@@ -111,8 +114,9 @@ select test.ok(
   not exists (select 1 from pg_class c join pg_namespace n on n.oid = c.relnamespace
               where n.nspname = 'public' and c.relkind = 'r'
                 and c.relname not in ('profiles','founders','companies','company_members','subscriptions',
-                                      'table_metadata','data_permissions','data_rows','audit_logs')),
-  'migrations created only the 9 documented tables in public');
+                                      'table_metadata','data_permissions','data_rows','audit_logs',
+                                      'import_jobs','platform_settings','manual_payments')),
+  'migrations created only the 12 documented tables in public');
 
 -- get_my_context key contract (mirrored by tests/unit/context.test.ts)
 select test.login(test.id('adminA'));

@@ -6,6 +6,11 @@
 --   trial expired  => READ-ONLY: admins and permitted employees can still read
 --                     and pass the export gate; every write is rejected.
 
+create function test.company_state(p_company uuid) returns text language sql stable security definer set search_path = '' as $$
+  select private.company_access(p_company)
+$$;
+grant execute on function test.company_state(uuid) to public;
+
 -- ---- Suspension --------------------------------------------------------------
 select test.login(test.id('adminA'));
 select test.throws($$select public.founder_set_company_status(test.id('companyA'), 'suspended')$$, '42501',
@@ -101,15 +106,24 @@ select test.login(test.id('adminB'));
 select test.ok(public.get_my_context() ->> 'access' = 'full', 'company B trial unaffected by company A expiry');
 select test.logout();
 
--- Founder converts the company to a paid plan => writes work again.
+-- A subscription can only become active through an APPROVED payment.
 select test.login(test.id('founder'));
-select public.founder_set_subscription(test.id('companyA'), 'standard', 'active', null, now() + interval '30 days');
+select test.throws($$select public.founder_set_subscription(test.id('companyA'), 'standard', 'active', null, now() + interval '30 days')$$, '22023',
+  'the founder cannot activate a subscription directly (no payment, no activation)');
+select test.logout();
+select test.ok(test.company_state(test.id('companyA')) = 'read_only', 'still read-only after the refused direct activation');
+
+select test.login(test.id('adminA'));
+select test.keep('pay60', public.submit_manual_payment(50, 'usd', 1, 'Bank transfer', 'T60-0001', null));
+select test.logout();
+select test.login(test.id('founder'));
+select public.founder_review_payment((test.got('pay60') ->> 'id')::uuid, 'approve', null);
 select test.logout();
 select test.login(test.id('adminA'));
-select test.ok(public.get_my_context() ->> 'access' = 'full', 'paid subscription: access is full again');
+select test.ok(public.get_my_context() ->> 'access' = 'full', 'approved payment: access is full again');
 select test.ok(test.affected($$insert into public.data_rows (company_id, table_id, data)
                                values (test.id('companyA'), test.id('ordersA'), '{"sku":"PAID"}')$$) = 1,
-  'paid subscription: writes allowed again');
+  'approved payment: writes allowed again');
 select test.logout();
 
 -- Paid period lapses => read-only again.

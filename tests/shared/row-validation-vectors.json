@@ -1,0 +1,2537 @@
+{
+ "columns": [
+  {
+   "key": "name",
+   "label": "Name",
+   "type": "text",
+   "required": true
+  },
+  {
+   "key": "qty",
+   "label": "Quantity",
+   "type": "integer"
+  },
+  {
+   "key": "price",
+   "label": "Price",
+   "type": "number"
+  },
+  {
+   "key": "active",
+   "label": "Active",
+   "type": "boolean"
+  },
+  {
+   "key": "day",
+   "label": "Day",
+   "type": "date"
+  },
+  {
+   "key": "seen",
+   "label": "Seen",
+   "type": "datetime"
+  },
+  {
+   "key": "note",
+   "label": "Note",
+   "type": "text"
+  }
+ ],
+ "vectors": [
+  {
+   "desc": "minimal valid row",
+   "data": {
+    "name": "Widget"
+   },
+   "error": null
+  },
+  {
+   "desc": "all types valid",
+   "data": {
+    "name": "W",
+    "qty": 3,
+    "price": 2.5,
+    "active": true,
+    "day": "2026-02-28",
+    "seen": "2026-02-28T10:30:00Z",
+    "note": "x"
+   },
+   "error": null
+  },
+  {
+   "desc": "nulls allowed for optional columns",
+   "data": {
+    "name": "W",
+    "qty": null,
+    "price": null,
+    "active": null,
+    "day": null,
+    "seen": null,
+    "note": null
+   },
+   "error": null
+  },
+  {
+   "desc": "missing required column",
+   "data": {
+    "qty": 1
+   },
+   "error": "Name is required"
+  },
+  {
+   "desc": "null required column",
+   "data": {
+    "name": null
+   },
+   "error": "Name is required"
+  },
+  {
+   "desc": "blank required text",
+   "data": {
+    "name": "   "
+   },
+   "error": "Name is required"
+  },
+  {
+   "desc": "empty optional text allowed",
+   "data": {
+    "name": "W",
+    "note": ""
+   },
+   "error": null
+  },
+  {
+   "desc": "text given a number",
+   "data": {
+    "name": 5
+   },
+   "error": "Name must be text"
+  },
+  {
+   "desc": "text too long",
+   "data": {
+    "name": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+   },
+   "error": "Name is too long (10000 characters maximum)"
+  },
+  {
+   "desc": "text at the limit",
+   "data": {
+    "name": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+   },
+   "error": null
+  },
+  {
+   "desc": "integer given a fraction",
+   "data": {
+    "name": "W",
+    "qty": 1.5
+   },
+   "error": "Quantity must be a whole number"
+  },
+  {
+   "desc": "integer given a string",
+   "data": {
+    "name": "W",
+    "qty": "3"
+   },
+   "error": "Quantity must be a whole number"
+  },
+  {
+   "desc": "integer beyond safe range",
+   "data": {
+    "name": "W",
+    "qty": 9007199254740993
+   },
+   "error": "Quantity must be a whole number"
+  },
+  {
+   "desc": "negative integer ok",
+   "data": {
+    "name": "W",
+    "qty": -7
+   },
+   "error": null
+  },
+  {
+   "desc": "integer written as 3.0 is whole",
+   "data": {
+    "name": "W",
+    "qty": 3.0
+   },
+   "error": null
+  },
+  {
+   "desc": "number given a string",
+   "data": {
+    "name": "W",
+    "price": "2.5"
+   },
+   "error": "Price must be a number"
+  },
+  {
+   "desc": "number given a boolean",
+   "data": {
+    "name": "W",
+    "price": true
+   },
+   "error": "Price must be a number"
+  },
+  {
+   "desc": "boolean given a string",
+   "data": {
+    "name": "W",
+    "active": "true"
+   },
+   "error": "Active must be true or false"
+  },
+  {
+   "desc": "boolean given a number",
+   "data": {
+    "name": "W",
+    "active": 1
+   },
+   "error": "Active must be true or false"
+  },
+  {
+   "desc": "date wrong format",
+   "data": {
+    "name": "W",
+    "day": "28/02/2026"
+   },
+   "error": "Day must be a date (YYYY-MM-DD)"
+  },
+  {
+   "desc": "date given a number",
+   "data": {
+    "name": "W",
+    "day": 20260228
+   },
+   "error": "Day must be a date (YYYY-MM-DD)"
+  },
+  {
+   "desc": "date not on the calendar",
+   "data": {
+    "name": "W",
+    "day": "2026-02-30"
+   },
+   "error": "Day is not a real calendar date"
+  },
+  {
+   "desc": "date leap day valid",
+   "data": {
+    "name": "W",
+    "day": "2028-02-29"
+   },
+   "error": null
+  },
+  {
+   "desc": "date leap day invalid year",
+   "data": {
+    "name": "W",
+    "day": "2027-02-29"
+   },
+   "error": "Day is not a real calendar date"
+  },
+  {
+   "desc": "datetime with offset",
+   "data": {
+    "name": "W",
+    "seen": "2026-02-28T10:30:00+05:30"
+   },
+   "error": null
+  },
+  {
+   "desc": "datetime with space separator",
+   "data": {
+    "name": "W",
+    "seen": "2026-02-28 10:30"
+   },
+   "error": null
+  },
+  {
+   "desc": "datetime with fractional seconds",
+   "data": {
+    "name": "W",
+    "seen": "2026-02-28T10:30:00.123Z"
+   },
+   "error": null
+  },
+  {
+   "desc": "datetime date-only is rejected",
+   "data": {
+    "name": "W",
+    "seen": "2026-02-28"
+   },
+   "error": "Seen must be a date and time (ISO 8601)"
+  },
+  {
+   "desc": "datetime impossible time",
+   "data": {
+    "name": "W",
+    "seen": "2026-02-28T25:61:00Z"
+   },
+   "error": "Seen is not a real date and time"
+  },
+  {
+   "desc": "datetime given a number",
+   "data": {
+    "name": "W",
+    "seen": 1700000000
+   },
+   "error": "Seen must be a date and time (ISO 8601)"
+  },
+  {
+   "desc": "unknown column rejected",
+   "data": {
+    "name": "W",
+    "colour": "red"
+   },
+   "error": "unknown column \"colour\""
+  },
+  {
+   "desc": "row that is not an object",
+   "data": [
+    1,
+    2,
+    3
+   ],
+   "error": "row must be an object"
+  }
+ ],
+ "column_vectors": [
+  {
+   "desc": "empty list is valid",
+   "columns": [],
+   "error": null
+  },
+  {
+   "desc": "typical definition",
+   "columns": [
+    {
+     "key": "sku",
+     "label": "SKU",
+     "type": "text",
+     "required": true
+    },
+    {
+     "key": "qty",
+     "label": "Quantity",
+     "type": "integer"
+    }
+   ],
+   "error": null
+  },
+  {
+   "desc": "not a list",
+   "columns": {
+    "a": 1
+   },
+   "error": "columns must be a list"
+  },
+  {
+   "desc": "null",
+   "columns": null,
+   "error": "columns must be a list"
+  },
+  {
+   "desc": "element not an object",
+   "columns": [
+    1
+   ],
+   "error": "each column must be an object"
+  },
+  {
+   "desc": "unknown property",
+   "columns": [
+    {
+     "key": "a",
+     "label": "A",
+     "type": "text",
+     "extra": 1
+    }
+   ],
+   "error": "unknown column property"
+  },
+  {
+   "desc": "key with uppercase",
+   "columns": [
+    {
+     "key": "Sku",
+     "label": "SKU",
+     "type": "text"
+    }
+   ],
+   "error": "column keys must be 1-40 characters: lowercase letters, digits, underscore, starting with a letter"
+  },
+  {
+   "desc": "key starting with digit",
+   "columns": [
+    {
+     "key": "1a",
+     "label": "A",
+     "type": "text"
+    }
+   ],
+   "error": "column keys must be 1-40 characters: lowercase letters, digits, underscore, starting with a letter"
+  },
+  {
+   "desc": "key with dash",
+   "columns": [
+    {
+     "key": "a-b",
+     "label": "A",
+     "type": "text"
+    }
+   ],
+   "error": "column keys must be 1-40 characters: lowercase letters, digits, underscore, starting with a letter"
+  },
+  {
+   "desc": "key too long",
+   "columns": [
+    {
+     "key": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+     "label": "A",
+     "type": "text"
+    }
+   ],
+   "error": "column keys must be 1-40 characters: lowercase letters, digits, underscore, starting with a letter"
+  },
+  {
+   "desc": "key at the limit",
+   "columns": [
+    {
+     "key": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+     "label": "A",
+     "type": "text"
+    }
+   ],
+   "error": null
+  },
+  {
+   "desc": "key not a string",
+   "columns": [
+    {
+     "key": 5,
+     "label": "A",
+     "type": "text"
+    }
+   ],
+   "error": "column keys must be 1-40 characters: lowercase letters, digits, underscore, starting with a letter"
+  },
+  {
+   "desc": "label missing",
+   "columns": [
+    {
+     "key": "a",
+     "type": "text"
+    }
+   ],
+   "error": "column label is required"
+  },
+  {
+   "desc": "label blank",
+   "columns": [
+    {
+     "key": "a",
+     "label": "   ",
+     "type": "text"
+    }
+   ],
+   "error": "column labels must be 1-120 characters"
+  },
+  {
+   "desc": "label too long",
+   "columns": [
+    {
+     "key": "a",
+     "label": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+     "type": "text"
+    }
+   ],
+   "error": "column labels must be 1-120 characters"
+  },
+  {
+   "desc": "bad type",
+   "columns": [
+    {
+     "key": "a",
+     "label": "A",
+     "type": "money"
+    }
+   ],
+   "error": "column type must be text, number, integer, boolean, date or datetime"
+  },
+  {
+   "desc": "missing type",
+   "columns": [
+    {
+     "key": "a",
+     "label": "A"
+    }
+   ],
+   "error": "column type must be text, number, integer, boolean, date or datetime"
+  },
+  {
+   "desc": "required not boolean",
+   "columns": [
+    {
+     "key": "a",
+     "label": "A",
+     "type": "text",
+     "required": "yes"
+    }
+   ],
+   "error": "column required flag must be true or false"
+  },
+  {
+   "desc": "duplicate key",
+   "columns": [
+    {
+     "key": "a",
+     "label": "A",
+     "type": "text"
+    },
+    {
+     "key": "a",
+     "label": "B",
+     "type": "text"
+    }
+   ],
+   "error": "duplicate column key \"a\""
+  },
+  {
+   "desc": "duplicate label ignoring case",
+   "columns": [
+    {
+     "key": "a",
+     "label": "Name",
+     "type": "text"
+    },
+    {
+     "key": "b",
+     "label": "name",
+     "type": "text"
+    }
+   ],
+   "error": "duplicate column name \"name\""
+  },
+  {
+   "desc": "200 columns allowed",
+   "columns": [
+    {
+     "key": "c0",
+     "label": "C0",
+     "type": "text"
+    },
+    {
+     "key": "c1",
+     "label": "C1",
+     "type": "text"
+    },
+    {
+     "key": "c2",
+     "label": "C2",
+     "type": "text"
+    },
+    {
+     "key": "c3",
+     "label": "C3",
+     "type": "text"
+    },
+    {
+     "key": "c4",
+     "label": "C4",
+     "type": "text"
+    },
+    {
+     "key": "c5",
+     "label": "C5",
+     "type": "text"
+    },
+    {
+     "key": "c6",
+     "label": "C6",
+     "type": "text"
+    },
+    {
+     "key": "c7",
+     "label": "C7",
+     "type": "text"
+    },
+    {
+     "key": "c8",
+     "label": "C8",
+     "type": "text"
+    },
+    {
+     "key": "c9",
+     "label": "C9",
+     "type": "text"
+    },
+    {
+     "key": "c10",
+     "label": "C10",
+     "type": "text"
+    },
+    {
+     "key": "c11",
+     "label": "C11",
+     "type": "text"
+    },
+    {
+     "key": "c12",
+     "label": "C12",
+     "type": "text"
+    },
+    {
+     "key": "c13",
+     "label": "C13",
+     "type": "text"
+    },
+    {
+     "key": "c14",
+     "label": "C14",
+     "type": "text"
+    },
+    {
+     "key": "c15",
+     "label": "C15",
+     "type": "text"
+    },
+    {
+     "key": "c16",
+     "label": "C16",
+     "type": "text"
+    },
+    {
+     "key": "c17",
+     "label": "C17",
+     "type": "text"
+    },
+    {
+     "key": "c18",
+     "label": "C18",
+     "type": "text"
+    },
+    {
+     "key": "c19",
+     "label": "C19",
+     "type": "text"
+    },
+    {
+     "key": "c20",
+     "label": "C20",
+     "type": "text"
+    },
+    {
+     "key": "c21",
+     "label": "C21",
+     "type": "text"
+    },
+    {
+     "key": "c22",
+     "label": "C22",
+     "type": "text"
+    },
+    {
+     "key": "c23",
+     "label": "C23",
+     "type": "text"
+    },
+    {
+     "key": "c24",
+     "label": "C24",
+     "type": "text"
+    },
+    {
+     "key": "c25",
+     "label": "C25",
+     "type": "text"
+    },
+    {
+     "key": "c26",
+     "label": "C26",
+     "type": "text"
+    },
+    {
+     "key": "c27",
+     "label": "C27",
+     "type": "text"
+    },
+    {
+     "key": "c28",
+     "label": "C28",
+     "type": "text"
+    },
+    {
+     "key": "c29",
+     "label": "C29",
+     "type": "text"
+    },
+    {
+     "key": "c30",
+     "label": "C30",
+     "type": "text"
+    },
+    {
+     "key": "c31",
+     "label": "C31",
+     "type": "text"
+    },
+    {
+     "key": "c32",
+     "label": "C32",
+     "type": "text"
+    },
+    {
+     "key": "c33",
+     "label": "C33",
+     "type": "text"
+    },
+    {
+     "key": "c34",
+     "label": "C34",
+     "type": "text"
+    },
+    {
+     "key": "c35",
+     "label": "C35",
+     "type": "text"
+    },
+    {
+     "key": "c36",
+     "label": "C36",
+     "type": "text"
+    },
+    {
+     "key": "c37",
+     "label": "C37",
+     "type": "text"
+    },
+    {
+     "key": "c38",
+     "label": "C38",
+     "type": "text"
+    },
+    {
+     "key": "c39",
+     "label": "C39",
+     "type": "text"
+    },
+    {
+     "key": "c40",
+     "label": "C40",
+     "type": "text"
+    },
+    {
+     "key": "c41",
+     "label": "C41",
+     "type": "text"
+    },
+    {
+     "key": "c42",
+     "label": "C42",
+     "type": "text"
+    },
+    {
+     "key": "c43",
+     "label": "C43",
+     "type": "text"
+    },
+    {
+     "key": "c44",
+     "label": "C44",
+     "type": "text"
+    },
+    {
+     "key": "c45",
+     "label": "C45",
+     "type": "text"
+    },
+    {
+     "key": "c46",
+     "label": "C46",
+     "type": "text"
+    },
+    {
+     "key": "c47",
+     "label": "C47",
+     "type": "text"
+    },
+    {
+     "key": "c48",
+     "label": "C48",
+     "type": "text"
+    },
+    {
+     "key": "c49",
+     "label": "C49",
+     "type": "text"
+    },
+    {
+     "key": "c50",
+     "label": "C50",
+     "type": "text"
+    },
+    {
+     "key": "c51",
+     "label": "C51",
+     "type": "text"
+    },
+    {
+     "key": "c52",
+     "label": "C52",
+     "type": "text"
+    },
+    {
+     "key": "c53",
+     "label": "C53",
+     "type": "text"
+    },
+    {
+     "key": "c54",
+     "label": "C54",
+     "type": "text"
+    },
+    {
+     "key": "c55",
+     "label": "C55",
+     "type": "text"
+    },
+    {
+     "key": "c56",
+     "label": "C56",
+     "type": "text"
+    },
+    {
+     "key": "c57",
+     "label": "C57",
+     "type": "text"
+    },
+    {
+     "key": "c58",
+     "label": "C58",
+     "type": "text"
+    },
+    {
+     "key": "c59",
+     "label": "C59",
+     "type": "text"
+    },
+    {
+     "key": "c60",
+     "label": "C60",
+     "type": "text"
+    },
+    {
+     "key": "c61",
+     "label": "C61",
+     "type": "text"
+    },
+    {
+     "key": "c62",
+     "label": "C62",
+     "type": "text"
+    },
+    {
+     "key": "c63",
+     "label": "C63",
+     "type": "text"
+    },
+    {
+     "key": "c64",
+     "label": "C64",
+     "type": "text"
+    },
+    {
+     "key": "c65",
+     "label": "C65",
+     "type": "text"
+    },
+    {
+     "key": "c66",
+     "label": "C66",
+     "type": "text"
+    },
+    {
+     "key": "c67",
+     "label": "C67",
+     "type": "text"
+    },
+    {
+     "key": "c68",
+     "label": "C68",
+     "type": "text"
+    },
+    {
+     "key": "c69",
+     "label": "C69",
+     "type": "text"
+    },
+    {
+     "key": "c70",
+     "label": "C70",
+     "type": "text"
+    },
+    {
+     "key": "c71",
+     "label": "C71",
+     "type": "text"
+    },
+    {
+     "key": "c72",
+     "label": "C72",
+     "type": "text"
+    },
+    {
+     "key": "c73",
+     "label": "C73",
+     "type": "text"
+    },
+    {
+     "key": "c74",
+     "label": "C74",
+     "type": "text"
+    },
+    {
+     "key": "c75",
+     "label": "C75",
+     "type": "text"
+    },
+    {
+     "key": "c76",
+     "label": "C76",
+     "type": "text"
+    },
+    {
+     "key": "c77",
+     "label": "C77",
+     "type": "text"
+    },
+    {
+     "key": "c78",
+     "label": "C78",
+     "type": "text"
+    },
+    {
+     "key": "c79",
+     "label": "C79",
+     "type": "text"
+    },
+    {
+     "key": "c80",
+     "label": "C80",
+     "type": "text"
+    },
+    {
+     "key": "c81",
+     "label": "C81",
+     "type": "text"
+    },
+    {
+     "key": "c82",
+     "label": "C82",
+     "type": "text"
+    },
+    {
+     "key": "c83",
+     "label": "C83",
+     "type": "text"
+    },
+    {
+     "key": "c84",
+     "label": "C84",
+     "type": "text"
+    },
+    {
+     "key": "c85",
+     "label": "C85",
+     "type": "text"
+    },
+    {
+     "key": "c86",
+     "label": "C86",
+     "type": "text"
+    },
+    {
+     "key": "c87",
+     "label": "C87",
+     "type": "text"
+    },
+    {
+     "key": "c88",
+     "label": "C88",
+     "type": "text"
+    },
+    {
+     "key": "c89",
+     "label": "C89",
+     "type": "text"
+    },
+    {
+     "key": "c90",
+     "label": "C90",
+     "type": "text"
+    },
+    {
+     "key": "c91",
+     "label": "C91",
+     "type": "text"
+    },
+    {
+     "key": "c92",
+     "label": "C92",
+     "type": "text"
+    },
+    {
+     "key": "c93",
+     "label": "C93",
+     "type": "text"
+    },
+    {
+     "key": "c94",
+     "label": "C94",
+     "type": "text"
+    },
+    {
+     "key": "c95",
+     "label": "C95",
+     "type": "text"
+    },
+    {
+     "key": "c96",
+     "label": "C96",
+     "type": "text"
+    },
+    {
+     "key": "c97",
+     "label": "C97",
+     "type": "text"
+    },
+    {
+     "key": "c98",
+     "label": "C98",
+     "type": "text"
+    },
+    {
+     "key": "c99",
+     "label": "C99",
+     "type": "text"
+    },
+    {
+     "key": "c100",
+     "label": "C100",
+     "type": "text"
+    },
+    {
+     "key": "c101",
+     "label": "C101",
+     "type": "text"
+    },
+    {
+     "key": "c102",
+     "label": "C102",
+     "type": "text"
+    },
+    {
+     "key": "c103",
+     "label": "C103",
+     "type": "text"
+    },
+    {
+     "key": "c104",
+     "label": "C104",
+     "type": "text"
+    },
+    {
+     "key": "c105",
+     "label": "C105",
+     "type": "text"
+    },
+    {
+     "key": "c106",
+     "label": "C106",
+     "type": "text"
+    },
+    {
+     "key": "c107",
+     "label": "C107",
+     "type": "text"
+    },
+    {
+     "key": "c108",
+     "label": "C108",
+     "type": "text"
+    },
+    {
+     "key": "c109",
+     "label": "C109",
+     "type": "text"
+    },
+    {
+     "key": "c110",
+     "label": "C110",
+     "type": "text"
+    },
+    {
+     "key": "c111",
+     "label": "C111",
+     "type": "text"
+    },
+    {
+     "key": "c112",
+     "label": "C112",
+     "type": "text"
+    },
+    {
+     "key": "c113",
+     "label": "C113",
+     "type": "text"
+    },
+    {
+     "key": "c114",
+     "label": "C114",
+     "type": "text"
+    },
+    {
+     "key": "c115",
+     "label": "C115",
+     "type": "text"
+    },
+    {
+     "key": "c116",
+     "label": "C116",
+     "type": "text"
+    },
+    {
+     "key": "c117",
+     "label": "C117",
+     "type": "text"
+    },
+    {
+     "key": "c118",
+     "label": "C118",
+     "type": "text"
+    },
+    {
+     "key": "c119",
+     "label": "C119",
+     "type": "text"
+    },
+    {
+     "key": "c120",
+     "label": "C120",
+     "type": "text"
+    },
+    {
+     "key": "c121",
+     "label": "C121",
+     "type": "text"
+    },
+    {
+     "key": "c122",
+     "label": "C122",
+     "type": "text"
+    },
+    {
+     "key": "c123",
+     "label": "C123",
+     "type": "text"
+    },
+    {
+     "key": "c124",
+     "label": "C124",
+     "type": "text"
+    },
+    {
+     "key": "c125",
+     "label": "C125",
+     "type": "text"
+    },
+    {
+     "key": "c126",
+     "label": "C126",
+     "type": "text"
+    },
+    {
+     "key": "c127",
+     "label": "C127",
+     "type": "text"
+    },
+    {
+     "key": "c128",
+     "label": "C128",
+     "type": "text"
+    },
+    {
+     "key": "c129",
+     "label": "C129",
+     "type": "text"
+    },
+    {
+     "key": "c130",
+     "label": "C130",
+     "type": "text"
+    },
+    {
+     "key": "c131",
+     "label": "C131",
+     "type": "text"
+    },
+    {
+     "key": "c132",
+     "label": "C132",
+     "type": "text"
+    },
+    {
+     "key": "c133",
+     "label": "C133",
+     "type": "text"
+    },
+    {
+     "key": "c134",
+     "label": "C134",
+     "type": "text"
+    },
+    {
+     "key": "c135",
+     "label": "C135",
+     "type": "text"
+    },
+    {
+     "key": "c136",
+     "label": "C136",
+     "type": "text"
+    },
+    {
+     "key": "c137",
+     "label": "C137",
+     "type": "text"
+    },
+    {
+     "key": "c138",
+     "label": "C138",
+     "type": "text"
+    },
+    {
+     "key": "c139",
+     "label": "C139",
+     "type": "text"
+    },
+    {
+     "key": "c140",
+     "label": "C140",
+     "type": "text"
+    },
+    {
+     "key": "c141",
+     "label": "C141",
+     "type": "text"
+    },
+    {
+     "key": "c142",
+     "label": "C142",
+     "type": "text"
+    },
+    {
+     "key": "c143",
+     "label": "C143",
+     "type": "text"
+    },
+    {
+     "key": "c144",
+     "label": "C144",
+     "type": "text"
+    },
+    {
+     "key": "c145",
+     "label": "C145",
+     "type": "text"
+    },
+    {
+     "key": "c146",
+     "label": "C146",
+     "type": "text"
+    },
+    {
+     "key": "c147",
+     "label": "C147",
+     "type": "text"
+    },
+    {
+     "key": "c148",
+     "label": "C148",
+     "type": "text"
+    },
+    {
+     "key": "c149",
+     "label": "C149",
+     "type": "text"
+    },
+    {
+     "key": "c150",
+     "label": "C150",
+     "type": "text"
+    },
+    {
+     "key": "c151",
+     "label": "C151",
+     "type": "text"
+    },
+    {
+     "key": "c152",
+     "label": "C152",
+     "type": "text"
+    },
+    {
+     "key": "c153",
+     "label": "C153",
+     "type": "text"
+    },
+    {
+     "key": "c154",
+     "label": "C154",
+     "type": "text"
+    },
+    {
+     "key": "c155",
+     "label": "C155",
+     "type": "text"
+    },
+    {
+     "key": "c156",
+     "label": "C156",
+     "type": "text"
+    },
+    {
+     "key": "c157",
+     "label": "C157",
+     "type": "text"
+    },
+    {
+     "key": "c158",
+     "label": "C158",
+     "type": "text"
+    },
+    {
+     "key": "c159",
+     "label": "C159",
+     "type": "text"
+    },
+    {
+     "key": "c160",
+     "label": "C160",
+     "type": "text"
+    },
+    {
+     "key": "c161",
+     "label": "C161",
+     "type": "text"
+    },
+    {
+     "key": "c162",
+     "label": "C162",
+     "type": "text"
+    },
+    {
+     "key": "c163",
+     "label": "C163",
+     "type": "text"
+    },
+    {
+     "key": "c164",
+     "label": "C164",
+     "type": "text"
+    },
+    {
+     "key": "c165",
+     "label": "C165",
+     "type": "text"
+    },
+    {
+     "key": "c166",
+     "label": "C166",
+     "type": "text"
+    },
+    {
+     "key": "c167",
+     "label": "C167",
+     "type": "text"
+    },
+    {
+     "key": "c168",
+     "label": "C168",
+     "type": "text"
+    },
+    {
+     "key": "c169",
+     "label": "C169",
+     "type": "text"
+    },
+    {
+     "key": "c170",
+     "label": "C170",
+     "type": "text"
+    },
+    {
+     "key": "c171",
+     "label": "C171",
+     "type": "text"
+    },
+    {
+     "key": "c172",
+     "label": "C172",
+     "type": "text"
+    },
+    {
+     "key": "c173",
+     "label": "C173",
+     "type": "text"
+    },
+    {
+     "key": "c174",
+     "label": "C174",
+     "type": "text"
+    },
+    {
+     "key": "c175",
+     "label": "C175",
+     "type": "text"
+    },
+    {
+     "key": "c176",
+     "label": "C176",
+     "type": "text"
+    },
+    {
+     "key": "c177",
+     "label": "C177",
+     "type": "text"
+    },
+    {
+     "key": "c178",
+     "label": "C178",
+     "type": "text"
+    },
+    {
+     "key": "c179",
+     "label": "C179",
+     "type": "text"
+    },
+    {
+     "key": "c180",
+     "label": "C180",
+     "type": "text"
+    },
+    {
+     "key": "c181",
+     "label": "C181",
+     "type": "text"
+    },
+    {
+     "key": "c182",
+     "label": "C182",
+     "type": "text"
+    },
+    {
+     "key": "c183",
+     "label": "C183",
+     "type": "text"
+    },
+    {
+     "key": "c184",
+     "label": "C184",
+     "type": "text"
+    },
+    {
+     "key": "c185",
+     "label": "C185",
+     "type": "text"
+    },
+    {
+     "key": "c186",
+     "label": "C186",
+     "type": "text"
+    },
+    {
+     "key": "c187",
+     "label": "C187",
+     "type": "text"
+    },
+    {
+     "key": "c188",
+     "label": "C188",
+     "type": "text"
+    },
+    {
+     "key": "c189",
+     "label": "C189",
+     "type": "text"
+    },
+    {
+     "key": "c190",
+     "label": "C190",
+     "type": "text"
+    },
+    {
+     "key": "c191",
+     "label": "C191",
+     "type": "text"
+    },
+    {
+     "key": "c192",
+     "label": "C192",
+     "type": "text"
+    },
+    {
+     "key": "c193",
+     "label": "C193",
+     "type": "text"
+    },
+    {
+     "key": "c194",
+     "label": "C194",
+     "type": "text"
+    },
+    {
+     "key": "c195",
+     "label": "C195",
+     "type": "text"
+    },
+    {
+     "key": "c196",
+     "label": "C196",
+     "type": "text"
+    },
+    {
+     "key": "c197",
+     "label": "C197",
+     "type": "text"
+    },
+    {
+     "key": "c198",
+     "label": "C198",
+     "type": "text"
+    },
+    {
+     "key": "c199",
+     "label": "C199",
+     "type": "text"
+    }
+   ],
+   "error": null
+  },
+  {
+   "desc": "201 columns rejected",
+   "columns": [
+    {
+     "key": "c0",
+     "label": "C0",
+     "type": "text"
+    },
+    {
+     "key": "c1",
+     "label": "C1",
+     "type": "text"
+    },
+    {
+     "key": "c2",
+     "label": "C2",
+     "type": "text"
+    },
+    {
+     "key": "c3",
+     "label": "C3",
+     "type": "text"
+    },
+    {
+     "key": "c4",
+     "label": "C4",
+     "type": "text"
+    },
+    {
+     "key": "c5",
+     "label": "C5",
+     "type": "text"
+    },
+    {
+     "key": "c6",
+     "label": "C6",
+     "type": "text"
+    },
+    {
+     "key": "c7",
+     "label": "C7",
+     "type": "text"
+    },
+    {
+     "key": "c8",
+     "label": "C8",
+     "type": "text"
+    },
+    {
+     "key": "c9",
+     "label": "C9",
+     "type": "text"
+    },
+    {
+     "key": "c10",
+     "label": "C10",
+     "type": "text"
+    },
+    {
+     "key": "c11",
+     "label": "C11",
+     "type": "text"
+    },
+    {
+     "key": "c12",
+     "label": "C12",
+     "type": "text"
+    },
+    {
+     "key": "c13",
+     "label": "C13",
+     "type": "text"
+    },
+    {
+     "key": "c14",
+     "label": "C14",
+     "type": "text"
+    },
+    {
+     "key": "c15",
+     "label": "C15",
+     "type": "text"
+    },
+    {
+     "key": "c16",
+     "label": "C16",
+     "type": "text"
+    },
+    {
+     "key": "c17",
+     "label": "C17",
+     "type": "text"
+    },
+    {
+     "key": "c18",
+     "label": "C18",
+     "type": "text"
+    },
+    {
+     "key": "c19",
+     "label": "C19",
+     "type": "text"
+    },
+    {
+     "key": "c20",
+     "label": "C20",
+     "type": "text"
+    },
+    {
+     "key": "c21",
+     "label": "C21",
+     "type": "text"
+    },
+    {
+     "key": "c22",
+     "label": "C22",
+     "type": "text"
+    },
+    {
+     "key": "c23",
+     "label": "C23",
+     "type": "text"
+    },
+    {
+     "key": "c24",
+     "label": "C24",
+     "type": "text"
+    },
+    {
+     "key": "c25",
+     "label": "C25",
+     "type": "text"
+    },
+    {
+     "key": "c26",
+     "label": "C26",
+     "type": "text"
+    },
+    {
+     "key": "c27",
+     "label": "C27",
+     "type": "text"
+    },
+    {
+     "key": "c28",
+     "label": "C28",
+     "type": "text"
+    },
+    {
+     "key": "c29",
+     "label": "C29",
+     "type": "text"
+    },
+    {
+     "key": "c30",
+     "label": "C30",
+     "type": "text"
+    },
+    {
+     "key": "c31",
+     "label": "C31",
+     "type": "text"
+    },
+    {
+     "key": "c32",
+     "label": "C32",
+     "type": "text"
+    },
+    {
+     "key": "c33",
+     "label": "C33",
+     "type": "text"
+    },
+    {
+     "key": "c34",
+     "label": "C34",
+     "type": "text"
+    },
+    {
+     "key": "c35",
+     "label": "C35",
+     "type": "text"
+    },
+    {
+     "key": "c36",
+     "label": "C36",
+     "type": "text"
+    },
+    {
+     "key": "c37",
+     "label": "C37",
+     "type": "text"
+    },
+    {
+     "key": "c38",
+     "label": "C38",
+     "type": "text"
+    },
+    {
+     "key": "c39",
+     "label": "C39",
+     "type": "text"
+    },
+    {
+     "key": "c40",
+     "label": "C40",
+     "type": "text"
+    },
+    {
+     "key": "c41",
+     "label": "C41",
+     "type": "text"
+    },
+    {
+     "key": "c42",
+     "label": "C42",
+     "type": "text"
+    },
+    {
+     "key": "c43",
+     "label": "C43",
+     "type": "text"
+    },
+    {
+     "key": "c44",
+     "label": "C44",
+     "type": "text"
+    },
+    {
+     "key": "c45",
+     "label": "C45",
+     "type": "text"
+    },
+    {
+     "key": "c46",
+     "label": "C46",
+     "type": "text"
+    },
+    {
+     "key": "c47",
+     "label": "C47",
+     "type": "text"
+    },
+    {
+     "key": "c48",
+     "label": "C48",
+     "type": "text"
+    },
+    {
+     "key": "c49",
+     "label": "C49",
+     "type": "text"
+    },
+    {
+     "key": "c50",
+     "label": "C50",
+     "type": "text"
+    },
+    {
+     "key": "c51",
+     "label": "C51",
+     "type": "text"
+    },
+    {
+     "key": "c52",
+     "label": "C52",
+     "type": "text"
+    },
+    {
+     "key": "c53",
+     "label": "C53",
+     "type": "text"
+    },
+    {
+     "key": "c54",
+     "label": "C54",
+     "type": "text"
+    },
+    {
+     "key": "c55",
+     "label": "C55",
+     "type": "text"
+    },
+    {
+     "key": "c56",
+     "label": "C56",
+     "type": "text"
+    },
+    {
+     "key": "c57",
+     "label": "C57",
+     "type": "text"
+    },
+    {
+     "key": "c58",
+     "label": "C58",
+     "type": "text"
+    },
+    {
+     "key": "c59",
+     "label": "C59",
+     "type": "text"
+    },
+    {
+     "key": "c60",
+     "label": "C60",
+     "type": "text"
+    },
+    {
+     "key": "c61",
+     "label": "C61",
+     "type": "text"
+    },
+    {
+     "key": "c62",
+     "label": "C62",
+     "type": "text"
+    },
+    {
+     "key": "c63",
+     "label": "C63",
+     "type": "text"
+    },
+    {
+     "key": "c64",
+     "label": "C64",
+     "type": "text"
+    },
+    {
+     "key": "c65",
+     "label": "C65",
+     "type": "text"
+    },
+    {
+     "key": "c66",
+     "label": "C66",
+     "type": "text"
+    },
+    {
+     "key": "c67",
+     "label": "C67",
+     "type": "text"
+    },
+    {
+     "key": "c68",
+     "label": "C68",
+     "type": "text"
+    },
+    {
+     "key": "c69",
+     "label": "C69",
+     "type": "text"
+    },
+    {
+     "key": "c70",
+     "label": "C70",
+     "type": "text"
+    },
+    {
+     "key": "c71",
+     "label": "C71",
+     "type": "text"
+    },
+    {
+     "key": "c72",
+     "label": "C72",
+     "type": "text"
+    },
+    {
+     "key": "c73",
+     "label": "C73",
+     "type": "text"
+    },
+    {
+     "key": "c74",
+     "label": "C74",
+     "type": "text"
+    },
+    {
+     "key": "c75",
+     "label": "C75",
+     "type": "text"
+    },
+    {
+     "key": "c76",
+     "label": "C76",
+     "type": "text"
+    },
+    {
+     "key": "c77",
+     "label": "C77",
+     "type": "text"
+    },
+    {
+     "key": "c78",
+     "label": "C78",
+     "type": "text"
+    },
+    {
+     "key": "c79",
+     "label": "C79",
+     "type": "text"
+    },
+    {
+     "key": "c80",
+     "label": "C80",
+     "type": "text"
+    },
+    {
+     "key": "c81",
+     "label": "C81",
+     "type": "text"
+    },
+    {
+     "key": "c82",
+     "label": "C82",
+     "type": "text"
+    },
+    {
+     "key": "c83",
+     "label": "C83",
+     "type": "text"
+    },
+    {
+     "key": "c84",
+     "label": "C84",
+     "type": "text"
+    },
+    {
+     "key": "c85",
+     "label": "C85",
+     "type": "text"
+    },
+    {
+     "key": "c86",
+     "label": "C86",
+     "type": "text"
+    },
+    {
+     "key": "c87",
+     "label": "C87",
+     "type": "text"
+    },
+    {
+     "key": "c88",
+     "label": "C88",
+     "type": "text"
+    },
+    {
+     "key": "c89",
+     "label": "C89",
+     "type": "text"
+    },
+    {
+     "key": "c90",
+     "label": "C90",
+     "type": "text"
+    },
+    {
+     "key": "c91",
+     "label": "C91",
+     "type": "text"
+    },
+    {
+     "key": "c92",
+     "label": "C92",
+     "type": "text"
+    },
+    {
+     "key": "c93",
+     "label": "C93",
+     "type": "text"
+    },
+    {
+     "key": "c94",
+     "label": "C94",
+     "type": "text"
+    },
+    {
+     "key": "c95",
+     "label": "C95",
+     "type": "text"
+    },
+    {
+     "key": "c96",
+     "label": "C96",
+     "type": "text"
+    },
+    {
+     "key": "c97",
+     "label": "C97",
+     "type": "text"
+    },
+    {
+     "key": "c98",
+     "label": "C98",
+     "type": "text"
+    },
+    {
+     "key": "c99",
+     "label": "C99",
+     "type": "text"
+    },
+    {
+     "key": "c100",
+     "label": "C100",
+     "type": "text"
+    },
+    {
+     "key": "c101",
+     "label": "C101",
+     "type": "text"
+    },
+    {
+     "key": "c102",
+     "label": "C102",
+     "type": "text"
+    },
+    {
+     "key": "c103",
+     "label": "C103",
+     "type": "text"
+    },
+    {
+     "key": "c104",
+     "label": "C104",
+     "type": "text"
+    },
+    {
+     "key": "c105",
+     "label": "C105",
+     "type": "text"
+    },
+    {
+     "key": "c106",
+     "label": "C106",
+     "type": "text"
+    },
+    {
+     "key": "c107",
+     "label": "C107",
+     "type": "text"
+    },
+    {
+     "key": "c108",
+     "label": "C108",
+     "type": "text"
+    },
+    {
+     "key": "c109",
+     "label": "C109",
+     "type": "text"
+    },
+    {
+     "key": "c110",
+     "label": "C110",
+     "type": "text"
+    },
+    {
+     "key": "c111",
+     "label": "C111",
+     "type": "text"
+    },
+    {
+     "key": "c112",
+     "label": "C112",
+     "type": "text"
+    },
+    {
+     "key": "c113",
+     "label": "C113",
+     "type": "text"
+    },
+    {
+     "key": "c114",
+     "label": "C114",
+     "type": "text"
+    },
+    {
+     "key": "c115",
+     "label": "C115",
+     "type": "text"
+    },
+    {
+     "key": "c116",
+     "label": "C116",
+     "type": "text"
+    },
+    {
+     "key": "c117",
+     "label": "C117",
+     "type": "text"
+    },
+    {
+     "key": "c118",
+     "label": "C118",
+     "type": "text"
+    },
+    {
+     "key": "c119",
+     "label": "C119",
+     "type": "text"
+    },
+    {
+     "key": "c120",
+     "label": "C120",
+     "type": "text"
+    },
+    {
+     "key": "c121",
+     "label": "C121",
+     "type": "text"
+    },
+    {
+     "key": "c122",
+     "label": "C122",
+     "type": "text"
+    },
+    {
+     "key": "c123",
+     "label": "C123",
+     "type": "text"
+    },
+    {
+     "key": "c124",
+     "label": "C124",
+     "type": "text"
+    },
+    {
+     "key": "c125",
+     "label": "C125",
+     "type": "text"
+    },
+    {
+     "key": "c126",
+     "label": "C126",
+     "type": "text"
+    },
+    {
+     "key": "c127",
+     "label": "C127",
+     "type": "text"
+    },
+    {
+     "key": "c128",
+     "label": "C128",
+     "type": "text"
+    },
+    {
+     "key": "c129",
+     "label": "C129",
+     "type": "text"
+    },
+    {
+     "key": "c130",
+     "label": "C130",
+     "type": "text"
+    },
+    {
+     "key": "c131",
+     "label": "C131",
+     "type": "text"
+    },
+    {
+     "key": "c132",
+     "label": "C132",
+     "type": "text"
+    },
+    {
+     "key": "c133",
+     "label": "C133",
+     "type": "text"
+    },
+    {
+     "key": "c134",
+     "label": "C134",
+     "type": "text"
+    },
+    {
+     "key": "c135",
+     "label": "C135",
+     "type": "text"
+    },
+    {
+     "key": "c136",
+     "label": "C136",
+     "type": "text"
+    },
+    {
+     "key": "c137",
+     "label": "C137",
+     "type": "text"
+    },
+    {
+     "key": "c138",
+     "label": "C138",
+     "type": "text"
+    },
+    {
+     "key": "c139",
+     "label": "C139",
+     "type": "text"
+    },
+    {
+     "key": "c140",
+     "label": "C140",
+     "type": "text"
+    },
+    {
+     "key": "c141",
+     "label": "C141",
+     "type": "text"
+    },
+    {
+     "key": "c142",
+     "label": "C142",
+     "type": "text"
+    },
+    {
+     "key": "c143",
+     "label": "C143",
+     "type": "text"
+    },
+    {
+     "key": "c144",
+     "label": "C144",
+     "type": "text"
+    },
+    {
+     "key": "c145",
+     "label": "C145",
+     "type": "text"
+    },
+    {
+     "key": "c146",
+     "label": "C146",
+     "type": "text"
+    },
+    {
+     "key": "c147",
+     "label": "C147",
+     "type": "text"
+    },
+    {
+     "key": "c148",
+     "label": "C148",
+     "type": "text"
+    },
+    {
+     "key": "c149",
+     "label": "C149",
+     "type": "text"
+    },
+    {
+     "key": "c150",
+     "label": "C150",
+     "type": "text"
+    },
+    {
+     "key": "c151",
+     "label": "C151",
+     "type": "text"
+    },
+    {
+     "key": "c152",
+     "label": "C152",
+     "type": "text"
+    },
+    {
+     "key": "c153",
+     "label": "C153",
+     "type": "text"
+    },
+    {
+     "key": "c154",
+     "label": "C154",
+     "type": "text"
+    },
+    {
+     "key": "c155",
+     "label": "C155",
+     "type": "text"
+    },
+    {
+     "key": "c156",
+     "label": "C156",
+     "type": "text"
+    },
+    {
+     "key": "c157",
+     "label": "C157",
+     "type": "text"
+    },
+    {
+     "key": "c158",
+     "label": "C158",
+     "type": "text"
+    },
+    {
+     "key": "c159",
+     "label": "C159",
+     "type": "text"
+    },
+    {
+     "key": "c160",
+     "label": "C160",
+     "type": "text"
+    },
+    {
+     "key": "c161",
+     "label": "C161",
+     "type": "text"
+    },
+    {
+     "key": "c162",
+     "label": "C162",
+     "type": "text"
+    },
+    {
+     "key": "c163",
+     "label": "C163",
+     "type": "text"
+    },
+    {
+     "key": "c164",
+     "label": "C164",
+     "type": "text"
+    },
+    {
+     "key": "c165",
+     "label": "C165",
+     "type": "text"
+    },
+    {
+     "key": "c166",
+     "label": "C166",
+     "type": "text"
+    },
+    {
+     "key": "c167",
+     "label": "C167",
+     "type": "text"
+    },
+    {
+     "key": "c168",
+     "label": "C168",
+     "type": "text"
+    },
+    {
+     "key": "c169",
+     "label": "C169",
+     "type": "text"
+    },
+    {
+     "key": "c170",
+     "label": "C170",
+     "type": "text"
+    },
+    {
+     "key": "c171",
+     "label": "C171",
+     "type": "text"
+    },
+    {
+     "key": "c172",
+     "label": "C172",
+     "type": "text"
+    },
+    {
+     "key": "c173",
+     "label": "C173",
+     "type": "text"
+    },
+    {
+     "key": "c174",
+     "label": "C174",
+     "type": "text"
+    },
+    {
+     "key": "c175",
+     "label": "C175",
+     "type": "text"
+    },
+    {
+     "key": "c176",
+     "label": "C176",
+     "type": "text"
+    },
+    {
+     "key": "c177",
+     "label": "C177",
+     "type": "text"
+    },
+    {
+     "key": "c178",
+     "label": "C178",
+     "type": "text"
+    },
+    {
+     "key": "c179",
+     "label": "C179",
+     "type": "text"
+    },
+    {
+     "key": "c180",
+     "label": "C180",
+     "type": "text"
+    },
+    {
+     "key": "c181",
+     "label": "C181",
+     "type": "text"
+    },
+    {
+     "key": "c182",
+     "label": "C182",
+     "type": "text"
+    },
+    {
+     "key": "c183",
+     "label": "C183",
+     "type": "text"
+    },
+    {
+     "key": "c184",
+     "label": "C184",
+     "type": "text"
+    },
+    {
+     "key": "c185",
+     "label": "C185",
+     "type": "text"
+    },
+    {
+     "key": "c186",
+     "label": "C186",
+     "type": "text"
+    },
+    {
+     "key": "c187",
+     "label": "C187",
+     "type": "text"
+    },
+    {
+     "key": "c188",
+     "label": "C188",
+     "type": "text"
+    },
+    {
+     "key": "c189",
+     "label": "C189",
+     "type": "text"
+    },
+    {
+     "key": "c190",
+     "label": "C190",
+     "type": "text"
+    },
+    {
+     "key": "c191",
+     "label": "C191",
+     "type": "text"
+    },
+    {
+     "key": "c192",
+     "label": "C192",
+     "type": "text"
+    },
+    {
+     "key": "c193",
+     "label": "C193",
+     "type": "text"
+    },
+    {
+     "key": "c194",
+     "label": "C194",
+     "type": "text"
+    },
+    {
+     "key": "c195",
+     "label": "C195",
+     "type": "text"
+    },
+    {
+     "key": "c196",
+     "label": "C196",
+     "type": "text"
+    },
+    {
+     "key": "c197",
+     "label": "C197",
+     "type": "text"
+    },
+    {
+     "key": "c198",
+     "label": "C198",
+     "type": "text"
+    },
+    {
+     "key": "c199",
+     "label": "C199",
+     "type": "text"
+    },
+    {
+     "key": "c200",
+     "label": "C200",
+     "type": "text"
+    }
+   ],
+   "error": "a table can have at most 200 columns"
+  }
+ ]
+}

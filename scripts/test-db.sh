@@ -34,7 +34,7 @@ trap cleanup EXIT
 
 psql_db() { # psql_db <db> <psql args...>
   local db="$1"; shift
-  "${PGBIN}/psql" -X -q -h "${WORK}" -U postgres -v ON_ERROR_STOP=1 -d "${db}" "$@"
+  "${PGBIN}/psql" -X -q -h "${WORK}" -U postgres -v ON_ERROR_STOP=1 -v root="${ROOT}" -d "${db}" "$@"
 }
 
 LOG="${WORK}/out.log"
@@ -75,6 +75,18 @@ run_suite() { # run_suite <mode>
     exit 1
   fi
   echo "   PASS: rollback refuses to run without explicit confirmation"
+  echo 1 >> "${PASS_FILE}"
+  if psql_db "${db}" -f "${ROOT}/supabase/rollback/20261013170000_m2_rollback.sql" >/dev/null 2>&1; then
+    echo "FAILED: M2 rollback script ran without app.confirm_m2_rollback" >&2
+    exit 1
+  fi
+  echo "   PASS: the M2+ rollback also refuses without explicit confirmation"
+  echo 1 >> "${PASS_FILE}"
+  if psql_db "${db}" -c "set app.confirm_m1_rollback = 'yes'" -f "${ROOT}/supabase/rollback/20261013160000_m1_rollback.sql" >/dev/null 2>&1; then
+    echo "FAILED: the M1 rollback ran while M2+ objects still depend on it" >&2
+    exit 1
+  fi
+  echo "   PASS: the M1 rollback refuses while M2+ objects depend on its tables (must roll back M2+ first)"
   echo 1 >> "${PASS_FILE}"
 
   run_file "${db}" "${ROOT}/tests/db/99_rollback.sql"

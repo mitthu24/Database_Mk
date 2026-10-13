@@ -54,13 +54,13 @@ insert into public.company_members (company_id, user_id, role, employee_code, cr
 -- Admins create logical tables (same name in both companies is allowed)
 select test.login(test.id('adminA'));
 insert into public.table_metadata (company_id, name, columns) values
-  (test.id('companyA'), 'Orders',  '[{"key":"sku","type":"text"},{"key":"qty","type":"number"}]'),
-  (test.id('companyA'), 'Vendors', '[{"key":"name","type":"text"}]');
+  (test.id('companyA'), 'Orders',  '[{"key":"sku","label":"SKU","type":"text","required":true},{"key":"qty","label":"Quantity","type":"number"}]'),
+  (test.id('companyA'), 'Vendors', '[{"key":"name","label":"Name","type":"text"}]');
 select test.logout();
 
 select test.login(test.id('adminB'));
 insert into public.table_metadata (company_id, name, columns) values
-  (test.id('companyB'), 'Orders', '[{"key":"sku","type":"text"}]');
+  (test.id('companyB'), 'Orders', '[{"key":"sku","label":"SKU","type":"text"}]');
 select test.logout();
 
 insert into test.ids (name, id)

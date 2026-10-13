@@ -28,7 +28,7 @@ ok() { echo "   PASS: $*"; }
 "${RUN[@]}" "${PGBIN}/initdb" -D "${WORK}/data" -A trust -U postgres >/dev/null
 "${RUN[@]}" "${PGBIN}/pg_ctl" -D "${WORK}/data" -w -l "${WORK}/pg.log" \
   -o "-c listen_addresses=127.0.0.1 -p ${PORT} -k ${WORK} -c fsync=off" start >/dev/null
-P=("${PGBIN}/psql" -X -q -h 127.0.0.1 -p "${PORT}" -U postgres -v ON_ERROR_STOP=1)
+P=("${PGBIN}/psql" -X -q -h 127.0.0.1 -p "${PORT}" -U postgres -v ON_ERROR_STOP=1 -v root="${ROOT}")
 url() { echo "postgresql://postgres@127.0.0.1:${PORT}/$1?sslmode=disable"; }
 newdb() { # newdb <name>  (+ Supabase emulation harness in the selected default-grant mode)
   "${P[@]}" -d postgres -c "create database $1" >/dev/null
@@ -42,17 +42,17 @@ cp "${ROOT}"/supabase/migrations/*.sql "${W}/supabase/migrations/"   # copies; t
 "${CLI[@]}" init --workdir "${W}" --force >/dev/null 2>&1 || fail "supabase init"
 echo "Supabase CLI $("${CLI[@]}" --version 2>&1 | tail -1) | default-grant mode: ${MODE} | local PostgreSQL only"
 
-echo "-- 1. dry-run lists the four files"
+echo "-- 1. dry-run lists the seven files"
 newdb cli_ok
-N=$("${CLI[@]}" db push --workdir "${W}" --db-url "$(url cli_ok)" --dry-run 2>&1 | grep -c "m1_0[1-4]_")
-[ "$((N))" -ge 4 ] || fail "dry-run did not list four migrations"
+N=$("${CLI[@]}" db push --workdir "${W}" --db-url "$(url cli_ok)" --dry-run 2>&1 | grep -cE "m[12]_0[1-7]_")
+[ "$((N))" -ge 7 ] || fail "dry-run did not list seven migrations"
 ok "dry-run lists the migrations without applying (tables: $("${P[@]}" -d cli_ok -At -c "select count(*) from pg_class where relname='companies'"))"
 
-echo "-- 2. real push applies 01-04 and records history"
+echo "-- 2. real push applies 01-07 and records history"
 "${CLI[@]}" db push --workdir "${W}" --db-url "$(url cli_ok)" --yes >"${WORK}/push.log" 2>&1 || { cat "${WORK}/push.log"; fail "db push"; }
-[ "$("${P[@]}" -d cli_ok -At -c "select count(*) from supabase_migrations.schema_migrations")" = "4" ] || fail "history rows != 4"
-[ "$("${P[@]}" -d cli_ok -At -c "select count(*) from pg_class c join pg_namespace n on n.oid=c.relnamespace where n.nspname='public' and c.relkind='r'")" = "9" ] || fail "expected 9 M1 tables"
-ok "four migrations applied, four history rows, nine tables"
+[ "$("${P[@]}" -d cli_ok -At -c "select count(*) from supabase_migrations.schema_migrations")" = "7" ] || fail "history rows != 7"
+[ "$("${P[@]}" -d cli_ok -At -c "select count(*) from pg_class c join pg_namespace n on n.oid=c.relnamespace where n.nspname='public' and c.relkind='r'")" = "12" ] || fail "expected 12 tables"
+ok "seven migrations applied, seven history rows, twelve tables"
 
 echo "-- 3. RLS suite + post-apply verification on the CLI-applied schema"
 PASS=0

@@ -40,15 +40,12 @@ revoke all on public.profiles, public.founders, public.companies,
 revoke all on sequence public.audit_logs_id_seq, public.data_rows_row_order_seq
   from public, anon, authenticated, service_role;
 
--- service_role (trusted server only) gets exactly what the app code uses:
---   company_members : employee provisioning / disabling / removal (M1 + M5)
---   audit_logs      : append-only event recording
--- Customer data (table_metadata, data_rows, ...) is NOT reachable with the
--- service-role key; later milestones add narrowly scoped grants or definer
--- functions instead. founders stays unreachable for every API role.
-grant select, insert, update, delete on public.company_members to service_role;
-grant insert on public.audit_logs to service_role;
-grant usage on sequence public.audit_logs_id_seq to service_role;
+-- service_role (trusted server only) gets NO table privileges. The server uses
+-- it solely to create/invite auth users through the Auth admin API; everything
+-- that touches company data goes through SECURITY DEFINER RPCs called with the
+-- acting user's own JWT, so the database re-verifies the caller every time
+-- (e.g. add_company_member checks the caller is an admin of a writable company).
+-- A leaked service-role key therefore cannot read or write any customer table.
 
 -- ---------------------------------------------------------------------------
 -- profiles

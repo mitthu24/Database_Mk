@@ -83,8 +83,8 @@ select test.ok((select count(*) from public.table_metadata where name = 'Orders'
 select test.login(test.id('adminA'));
 select test.throws($$insert into public.table_metadata (company_id, name) values (test.id('companyA'), 'orders')$$, '23505',
   'table names are unique per company (case-insensitive)');
-select test.throws($$insert into public.table_metadata (company_id, name, columns) values (test.id('companyA'), 'Bad', '{}')$$, '23514',
-  'table columns must be a JSON array');
+select test.throws($$insert into public.table_metadata (company_id, name, columns) values (test.id('companyA'), 'Bad', '{}')$$, '22023',
+  'table columns must be a JSON array (rejected by the column validator)');
 select test.throws($$insert into public.data_rows (company_id, table_id, data) values (test.id('companyA'), test.id('ordersA'), '[1]')$$, '23514',
   'row data must be a JSON object');
 select test.logout();

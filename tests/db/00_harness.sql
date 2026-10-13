@@ -140,3 +140,23 @@ begin
   return n;
 end $$;
 grant execute on function test.affected(text) to public;
+
+-- Remember an id (e.g. a freshly created table) under a name, from any role.
+create function test.save(p_name text, p_id text) returns uuid
+language sql security definer set search_path = '' as $$
+  insert into test.ids (name, id) values (p_name, p_id::uuid)
+  on conflict (name) do update set id = excluded.id returning id
+$$;
+grant execute on function test.save(text, text) to public;
+
+-- Keep a jsonb result (e.g. an RPC response) so a LATER statement can assert on it.
+-- (A STABLE function in the same statement as a data-changing call sees the old snapshot.)
+create table test.kv (name text primary key, val jsonb);
+create function test.keep(p_name text, p_val jsonb) returns jsonb
+language sql security definer set search_path = '' as $$
+  insert into test.kv (name, val) values (p_name, p_val)
+  on conflict (name) do update set val = excluded.val returning val
+$$;
+create function test.got(p_name text) returns jsonb
+language sql stable security definer set search_path = '' as $$ select val from test.kv where name = p_name $$;
+grant execute on function test.keep(text, jsonb), test.got(text) to public;
