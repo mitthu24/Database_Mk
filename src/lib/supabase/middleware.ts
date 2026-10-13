@@ -1,6 +1,8 @@
 import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
 
+import { getSupabaseConfig } from "@/lib/supabase/config";
+
 export type SessionRefresh = {
   response: NextResponse;
   isAuthenticated: boolean;
@@ -13,15 +15,15 @@ export type SessionRefresh = {
 export async function updateSession(request: NextRequest): Promise<SessionRefresh> {
   let response = NextResponse.next({ request });
 
-  const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
-  const anonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+  const config = getSupabaseConfig();
 
-  if (!url || !anonKey) {
-    // Not configured yet: let public pages (e.g. /setup) render instead of crashing.
+  if (!config.ok) {
+    // Missing or REJECTED configuration (e.g. a preview pointing at production):
+    // behave as unconfigured so protected routes fail closed.
     return { response, isAuthenticated: false, supabaseConfigured: false };
   }
 
-  const supabase = createServerClient(url, anonKey, {
+  const supabase = createServerClient(config.url, config.anonKey, {
     cookies: {
       getAll() {
         return request.cookies.getAll();

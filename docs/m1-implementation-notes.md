@@ -7,7 +7,7 @@ Branch `claude/optimistic-cerf-yd7cvu`. Last updated for the M1 preparation pass
 | Area | State |
 |---|---|
 | Migrations written (4 files + rollback) | Done, **not applied anywhere** |
-| Migrations tested | Yes — on a throwaway **local PostgreSQL 16** with a Supabase emulation harness |
+| Migrations tested | Yes — on a throwaway **local PostgreSQL 16** with a Supabase emulation harness (see `m1-validation-checkpoint.md` for the audit and results) |
 | Live Supabase project verified (`evgwjbyrmuljrccgtedi`) | **No — blocked** (see §2) |
 | Live schema inspected / `m1-live-schema-review.md` | **Not done** — cannot be done without access; not fabricated |
 | Auth UI + server actions + route protection | Implemented; build, typecheck, lint, unit tests pass |
@@ -23,8 +23,7 @@ Branch `claude/optimistic-cerf-yd7cvu`. Last updated for the M1 preparation pass
 
 To unblock Phase 2:
 1. Allow `*.supabase.com` and `*.supabase.co` in the environment's network settings, **or** run the inspection yourself.
-2. Connect the Supabase MCP in read-only mode (local terminal):
-   `claude mcp add --scope project --transport http supabase "https://mcp.supabase.com/mcp?project_ref=evgwjbyrmuljrccgtedi&read_only=true&features=docs%2Cdatabase%2Cdebugging"` then `/mcp` to authenticate. (Verify the `read_only` parameter against the current Supabase MCP docs.)
+2. Connect the Supabase MCP to a **development** project (see `docs/m1-dev-deployment-procedure.md`). `read_only=true` only "excludes mutating tools" per the official `supabase/mcp` README; it is **not** a proven database-level guarantee — verify it with a harmless write on the dev project and approve tool calls manually.
 3. Run `docs/m1-live-inspection-queries.sql` (all `SELECT`s) and use the results to write `docs/m1-live-schema-review.md`.
 
 ## 3. Approved-for-review design decisions (deviations from `docs/03`)
@@ -113,7 +112,9 @@ Why this is safe: `founders` has no grants for `anon`, `authenticated` **or** `s
 ## 9. RLS policies and helper functions
 
 All in `private`, `SECURITY DEFINER`, `search_path = ''`, owner-bypass of RLS (so no recursive policy evaluation), `EXECUTE` revoked from `PUBLIC`/`anon` and granted to `authenticated`/`service_role` only because policies run as the caller:
-`is_founder()`, `is_company_member(company)`, `is_company_admin(company)`, `company_can_read(company)`, `company_can_write(company)`, `has_table_permission(table, perm)`, `shares_company_as_admin(profile)`; plus owner-only `write_audit`, `grant_founder`, `revoke_founder`, `handle_new_user`.
+`is_founder()`, `is_company_member(company)`, `is_company_admin(company)`, `company_can_read(company)`, `company_can_write(company)`, `has_table_permission(table, perm)`, `shares_company_as_admin(profile)`, `accessible_table_ids(perm, write)`; plus owner-only `write_audit`, `grant_founder`, `revoke_founder`, `handle_new_user`.
+
+`data_rows` policies are a single uncorrelated `table_id in (select private.accessible_table_ids(...))`, so access is computed once per statement instead of per row (local benchmark, 200k rows: filtered scan 2,181 ms → 124 ms; employee full count 4,694 ms → 101 ms).
 
 Every M1 table has RLS enabled and no default-allow. Privileges are revoked **per table** (never schema-wide, so unrelated live tables are untouched) and re-granted minimally, including **column-level** grants (e.g. `authenticated` may `UPDATE` only `companies.name`, `profiles.full_name`, and the data columns of `table_metadata`/`data_permissions`/`data_rows`). Policy details are in `supabase/migrations/…_03_rls_and_grants.sql`.
 
@@ -126,12 +127,12 @@ RLS cannot tell "view" from "export": anyone with `can_view` can still page thro
 | File | Contents |
 |---|---|
 | `20261013160000_m1_01_tables.sql` | tables, constraints, indexes, `updated_at` + audit-immutability triggers |
-| `20261013160100_m1_02_helper_functions.sql` | `private` helper functions and their privileges |
+| `20261013160100_m1_02_helper_functions.sql` | `private` helper functions (incl. `accessible_table_ids`) and their privileges |
 | `20261013160200_m1_03_rls_and_grants.sql` | RLS, policies, table/column grants |
 | `20261013160300_m1_04_auth_triggers_and_rpcs.sql` | `auth.users` trigger, profile **backfill**, `register_company`, `get_my_context`, `authorize_export`, founder RPCs |
 | `supabase/rollback/20261013160000_m1_rollback.sql` | guarded rollback (outside `migrations/`) |
 
-They are deliberately strict (no `or replace` / `if not exists`): a clash with an existing live object fails the migration instead of overwriting it. Migration 04 inserts one `profiles` row per existing auth user (additive; review the count from inspection query 13).
+Each file is wrapped in `begin; … commit;` (a mid-file failure leaves nothing behind — tested). `data_rows.created_by` has no FK on purpose (an unindexed FK to `auth.users` would scan the largest table on user deletion). They are deliberately strict (no `or replace` / `if not exists`): a clash with an existing live object fails the migration instead of overwriting it. Migration 04 inserts one `profiles` row per existing auth user (additive; review the count from inspection query 13).
 
 ### Apply gate — all must be true before running anything (your approval required)
 1. Project identity verified (dashboard URL ref = `evgwjbyrmuljrccgtedi`).
@@ -152,8 +153,8 @@ Suggested workflow once approved: `supabase link --project-ref evgwjbyrmuljrccgt
 |---|---|---|
 | `npm run typecheck` | `tsc --noEmit` | pass |
 | `npm run lint` | ESLint | pass |
-| `npm test` | Vitest unit tests (route guard, redirect safety, Zod schemas, error mapping, context parsing, employee provisioning with mocks) | **49 passed** |
-| `npm run test:db` | Applies the migrations to a throwaway local PostgreSQL 16 cluster behind a Supabase emulation harness and runs the RLS suite | **191 assertions passed** |
+| `npm test` | Vitest unit tests (route guard, redirect safety, Zod schemas, error mapping, context parsing, employee provisioning with mocks, Supabase environment guard) | **65 passed** |
+| `npm run test:db` | Applies the migrations to a throwaway local PostgreSQL 16 cluster behind a Supabase emulation harness and runs the RLS suite, the rollback, and a migration-atomicity scenario | **217 assertions passed** |
 | `npm run build` | Production build | pass |
 
 DB suite covers: profile creation (and hostile signup metadata ignored); registration atomicity (forced mid-registration failure leaves nothing behind); 30-day trial from the server clock; trial expiry → read-only → paid → lapse; suspension and restore; founder isolation (no access to customer data, no direct writes, unprovisioned/revoked users powerless, `founders` unreachable even by `service_role`); company-admin limits (cannot touch status/plan/trial/memberships/audit); **two companies** with cross-tenant read/write/IDOR attempts in both directions; employees with **edit**, **view-only**, **view+export** and **no** grants, plus a disabled member and an employee of the other company; unauthorized API access as `anon`; structural checks (RLS on every table, no `PUBLIC`/`anon` function execute, empty `search_path` on every definer function, column-level write surface); rollback.
@@ -167,7 +168,8 @@ DB suite covers: profile creation (and hostile signup metadata ignored); registr
 | `NEXT_PUBLIC_SUPABASE_URL` | public | project URL |
 | `NEXT_PUBLIC_SUPABASE_ANON_KEY` | public | anon/publishable key (RLS protects data) |
 | `SUPABASE_SERVICE_ROLE_KEY` | **server only** | employee provisioning; bypasses RLS — never prefix with `NEXT_PUBLIC_` |
-| `NEXT_PUBLIC_SITE_URL` | public | base URL for email confirmation/invite redirects |
+| `NEXT_PUBLIC_SITE_URL` | public | base URL for email confirmation/invite redirects (must be `https://…` when `VERCEL_ENV=production`) |
+| `PRODUCTION_SUPABASE_PROJECT_REF` | server | ref of the **verified** production project; set in every Vercel environment. Production refuses to run without it; non-production refuses a URL that points at it (`src/lib/supabase/config.ts`) |
 
 Set them in `.env.local` (git-ignored) and in Vercel project settings (service-role key as a non-public variable). Never paste keys into chat.
 

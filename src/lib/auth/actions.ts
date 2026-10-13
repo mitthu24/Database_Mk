@@ -14,16 +14,13 @@ import {
   safeNextPath,
   type ActionState,
 } from "@/lib/auth/validation";
+import { getSiteUrl, getSupabaseConfig, requireSupabaseConfig } from "@/lib/supabase/config";
 import { createClient } from "@/lib/supabase/server";
 
 const GENERIC_ERROR = "Something went wrong. Please try again.";
 
-function siteUrl() {
-  return process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
-}
-
 function isConfigured() {
-  return Boolean(process.env.NEXT_PUBLIC_SUPABASE_URL && process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY);
+  return getSupabaseConfig().ok;
 }
 
 const NOT_CONFIGURED: ActionState = {
@@ -69,7 +66,7 @@ export async function signUp(_prev: ActionState | undefined, formData: FormData)
       // Only descriptive values. Roles and company ids are never accepted from
       // signup metadata (the database trigger ignores everything but full_name).
       data: { full_name: fullName, pending_company_name: companyName },
-      emailRedirectTo: `${siteUrl()}/auth/callback?next=/onboarding`,
+      emailRedirectTo: `${getSiteUrl()}/auth/callback?next=/onboarding`,
     },
   });
   if (error) return { message: friendlyAuthError(error) };
@@ -130,11 +127,10 @@ export async function changePassword(_prev: ActionState | undefined, formData: F
 
   // Re-authenticate with the CURRENT password on a throwaway client that keeps
   // no session, so the real session cookies are untouched by this check.
-  const verifier = createStatelessClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-    { auth: { persistSession: false, autoRefreshToken: false, detectSessionInUrl: false } },
-  );
+  const { url, anonKey } = requireSupabaseConfig();
+  const verifier = createStatelessClient(url, anonKey, {
+    auth: { persistSession: false, autoRefreshToken: false, detectSessionInUrl: false },
+  });
   const { error: verifyError } = await verifier.auth.signInWithPassword({
     email: user.email,
     password: parsed.data.currentPassword,

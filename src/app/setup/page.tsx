@@ -1,7 +1,11 @@
+import { notFound } from "next/navigation";
+import { connection } from "next/server";
+import { Suspense } from "react";
 import { CheckCircle2, XCircle, AlertTriangle } from "lucide-react";
 
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { getSupabaseConfig } from "@/lib/supabase/config";
 
 type CheckStatus = "ok" | "missing" | "error";
 
@@ -17,6 +21,15 @@ async function runChecks(): Promise<CheckResult[]> {
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
   const anonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
   const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+
+  const guard = getSupabaseConfig();
+  results.push({
+    label: "Environment guard (which Supabase project this deployment may use)",
+    status: guard.ok ? "ok" : "error",
+    detail: guard.ok
+      ? `Accepted for the "${guard.environment}" environment.`
+      : `Rejected: ${guard.reason}`,
+  });
 
   results.push({
     label: "NEXT_PUBLIC_SUPABASE_URL",
@@ -38,7 +51,7 @@ async function runChecks(): Promise<CheckResult[]> {
       : "Not set — required for founder-provisioning and other admin actions.",
   });
 
-  if (url && anonKey) {
+  if (guard.ok && url && anonKey) {
     try {
       const res = await fetch(`${url}/auth/v1/health`, {
         headers: { apikey: anonKey },
@@ -62,7 +75,7 @@ async function runChecks(): Promise<CheckResult[]> {
     results.push({
       label: "Supabase Auth reachable",
       status: "missing",
-      detail: "Skipped — Supabase URL/anon key not configured.",
+      detail: "Skipped — Supabase configuration is missing or rejected by the environment guard.",
     });
   }
 
@@ -75,7 +88,12 @@ function StatusIcon({ status }: { status: CheckStatus }) {
   return <XCircle className="text-destructive" />;
 }
 
-export default async function SetupPage() {
+async function SetupContent() {
+  // Evaluate the CURRENT runtime environment, never a build-time snapshot.
+  await connection();
+  // Diagnostics are for development and previews only.
+  if (process.env.VERCEL_ENV === "production") notFound();
+
   const checks = await runChecks();
   const allOk = checks.every((c) => c.status === "ok");
 
@@ -112,5 +130,13 @@ export default async function SetupPage() {
         </CardContent>
       </Card>
     </div>
+  );
+}
+
+export default function SetupPage() {
+  return (
+    <Suspense fallback={<div className="mx-auto h-64 max-w-2xl animate-pulse rounded-xl bg-muted" aria-hidden />}>
+      <SetupContent />
+    </Suspense>
   );
 }

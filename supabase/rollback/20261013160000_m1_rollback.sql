@@ -55,6 +55,7 @@ drop function private.company_can_read(uuid);
 drop function private.company_can_write(uuid);
 drop function private.has_table_permission(uuid, text);
 drop function private.shares_company_as_admin(uuid);
+drop function private.accessible_table_ids(text, boolean);
 drop function private.write_audit(uuid, uuid, text, text, uuid, jsonb);
 drop function private.set_updated_at();
 drop function private.audit_logs_immutable();

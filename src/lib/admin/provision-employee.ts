@@ -3,6 +3,7 @@ import "server-only";
 import { requireCompanyAdmin } from "@/lib/auth/dal";
 import { employeeSchema, fieldErrorsFrom, type ActionState } from "@/lib/auth/validation";
 import { createAdminClient } from "@/lib/supabase/admin";
+import { getSiteUrl } from "@/lib/supabase/config";
 
 // Creates an employee in the CALLER's company. Design rules:
 //  1. Authorization first: the caller must be an active admin of a company that
@@ -30,7 +31,7 @@ export async function provisionEmployee(input: unknown): Promise<ActionState> {
   const { email, fullName, employeeCode } = parsed.data;
 
   const service = createAdminClient();
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
+  const siteUrl = getSiteUrl();
 
   const { data: invited, error: inviteError } = await service.auth.admin.inviteUserByEmail(email, {
     data: { full_name: fullName },

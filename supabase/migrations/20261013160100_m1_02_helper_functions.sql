@@ -1,3 +1,5 @@
+begin;
+
 -- M1 / 02 — authorization helper functions (private schema).
 --
 -- STATUS: DRAFT — NOT APPLIED. See 01 for the review gate.
@@ -111,6 +113,44 @@ as $$
   );
 $$;
 
+-- accessible_table_ids: the logical tables the caller may touch for an operation.
+-- Used by the data_rows policies as an UNCORRELATED subquery, so PostgreSQL
+-- evaluates it ONCE per statement (hashed) instead of calling the permission
+-- functions for every row. Benchmark (200k rows, local PostgreSQL 16): filtered
+-- scans dropped from seconds to tens of milliseconds, with identical semantics.
+--   p_perm  : view | create | edit | delete | import | export
+--   p_write : true  => company must be entitled (not suspended, not expired)
+--             false => company merely must not be suspended
+-- Admins implicitly hold every permission on their own company's tables.
+create function private.accessible_table_ids(p_perm text, p_write boolean) returns setof uuid
+language sql stable security definer
+set search_path = ''
+as $$
+  select t.id
+  from public.company_members m
+  join public.table_metadata t on t.company_id = m.company_id
+  where m.user_id = (select auth.uid())
+    and m.status = 'active'
+    and case when p_write then private.company_can_write(m.company_id)
+             else private.company_can_read(m.company_id) end
+    and (
+      m.role = 'admin'
+      or exists (
+        select 1 from public.data_permissions p
+        where p.table_id = t.id and p.user_id = m.user_id
+          and case p_perm
+                when 'view'   then p.can_view
+                when 'create' then p.can_create
+                when 'edit'   then p.can_edit
+                when 'delete' then p.can_delete
+                when 'import' then p.can_import
+                when 'export' then p.can_export
+                else false
+              end
+      )
+    );
+$$;
+
 -- shares_company_as_admin: caller administers a company the profile belongs to
 create function private.shares_company_as_admin(p_profile uuid) returns boolean
 language sql stable security definer
@@ -148,6 +188,7 @@ revoke all on function private.company_can_read(uuid) from public, anon;
 revoke all on function private.company_can_write(uuid) from public, anon;
 revoke all on function private.has_table_permission(uuid, text) from public, anon;
 revoke all on function private.shares_company_as_admin(uuid) from public, anon;
+revoke all on function private.accessible_table_ids(text, boolean) from public, anon;
 revoke all on function private.write_audit(uuid, uuid, text, text, uuid, jsonb) from public, anon, authenticated;
 
 grant execute on function private.is_founder() to authenticated, service_role;
@@ -157,4 +198,7 @@ grant execute on function private.company_can_read(uuid) to authenticated, servi
 grant execute on function private.company_can_write(uuid) to authenticated, service_role;
 grant execute on function private.has_table_permission(uuid, text) to authenticated, service_role;
 grant execute on function private.shares_company_as_admin(uuid) to authenticated, service_role;
+grant execute on function private.accessible_table_ids(text, boolean) to authenticated, service_role;
 -- write_audit: owner only (called from other SECURITY DEFINER functions).
+
+commit;

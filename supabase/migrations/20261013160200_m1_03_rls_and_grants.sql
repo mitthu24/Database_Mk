@@ -1,3 +1,5 @@
+begin;
+
 -- M1 / 03 — Row Level Security, policies and privileges.
 --
 -- STATUS: DRAFT — NOT APPLIED. See 01 for the review gate.
@@ -163,37 +165,25 @@ grant insert (company_id, table_id, data) on public.data_rows to authenticated;
 grant update (data) on public.data_rows to authenticated;
 grant delete on public.data_rows to authenticated;
 
+-- Each policy is a single uncorrelated "table_id in (select …)" so the access
+-- decision is computed once per statement (see private.accessible_table_ids).
+-- company_id/table_id consistency is additionally enforced by the composite FK.
 create policy data_rows_select on public.data_rows
   for select to authenticated
-  using (
-    private.company_can_read(company_id)
-    and (private.is_company_admin(company_id) or private.has_table_permission(table_id, 'view'))
-  );
+  using (table_id in (select private.accessible_table_ids('view', false)));
 
 create policy data_rows_insert on public.data_rows
   for insert to authenticated
-  with check (
-    private.company_can_write(company_id)
-    and (private.is_company_admin(company_id) or private.has_table_permission(table_id, 'create'))
-  );
+  with check (table_id in (select private.accessible_table_ids('create', true)));
 
 create policy data_rows_update on public.data_rows
   for update to authenticated
-  using (
-    private.company_can_write(company_id)
-    and (private.is_company_admin(company_id) or private.has_table_permission(table_id, 'edit'))
-  )
-  with check (
-    private.company_can_write(company_id)
-    and (private.is_company_admin(company_id) or private.has_table_permission(table_id, 'edit'))
-  );
+  using (table_id in (select private.accessible_table_ids('edit', true)))
+  with check (table_id in (select private.accessible_table_ids('edit', true)));
 
 create policy data_rows_delete on public.data_rows
   for delete to authenticated
-  using (
-    private.company_can_write(company_id)
-    and (private.is_company_admin(company_id) or private.has_table_permission(table_id, 'delete'))
-  );
+  using (table_id in (select private.accessible_table_ids('delete', true)));
 
 -- ---------------------------------------------------------------------------
 -- audit_logs — company admins read their company's; founder reads all
@@ -206,3 +196,5 @@ create policy audit_logs_select on public.audit_logs
     (company_id is not null and private.is_company_admin(company_id))
     or private.is_founder()
   );
+
+commit;

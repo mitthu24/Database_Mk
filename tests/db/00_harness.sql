@@ -16,6 +16,15 @@ begin
   end if;
 end $$;
 
+-- The role GoTrue (Supabase Auth) uses to write auth.users. It has no access to
+-- our "private" schema, which is exactly what the signup trigger must survive.
+do $$
+begin
+  if not exists (select from pg_roles where rolname = 'supabase_auth_admin') then
+    create role supabase_auth_admin nologin;
+  end if;
+end $$;
+
 create schema auth;
 create table auth.users (
   id                  uuid primary key default gen_random_uuid(),
@@ -35,7 +44,8 @@ as $$
   )::uuid
 $$;
 
-grant usage on schema auth to anon, authenticated, service_role;
+grant usage on schema auth to anon, authenticated, service_role, supabase_auth_admin;
+grant select, insert on auth.users to supabase_auth_admin;
 grant execute on function auth.uid() to anon, authenticated, service_role;
 grant usage on schema public to anon, authenticated, service_role;
 

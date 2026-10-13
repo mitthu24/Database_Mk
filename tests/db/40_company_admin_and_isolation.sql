@@ -54,8 +54,8 @@ select test.throws($$insert into public.data_rows (company_id, table_id, data)
                      values (test.id('companyB'), test.id('ordersB'), '{"x":1}')$$, '42501',
   'admin A cannot insert rows into company B (company_id = B)');
 select test.throws($$insert into public.data_rows (company_id, table_id, data)
-                     values (test.id('companyA'), test.id('ordersB'), '{"x":1}')$$, '23503',
-  'admin A cannot smuggle rows into B''s table by lying about company_id (composite FK)');
+                     values (test.id('companyA'), test.id('ordersB'), '{"x":1}')$$, '42501',
+  'admin A cannot smuggle rows into B''s table by lying about company_id (policy)');
 select test.throws($$insert into public.data_permissions (company_id, user_id, table_id, can_view)
                      values (test.id('companyA'), test.id('editorA'), test.id('ordersB'), true)$$, '23503',
   'permission rows cannot point at another company''s table (composite FK)');
@@ -63,6 +63,11 @@ select test.throws($$insert into public.data_permissions (company_id, user_id, t
                      values (test.id('companyB'), test.id('empB'), test.id('ordersB'), true)$$, '42501',
   'admin A cannot grant permissions inside company B');
 select test.logout();
+
+-- Structural guarantee, independent of RLS (runs as the table owner, RLS bypassed).
+select test.throws($$insert into public.data_rows (company_id, table_id, data)
+                     values (test.id('companyA'), test.id('ordersB'), '{"x":1}')$$, '23503',
+  'even with RLS bypassed, a row cannot reference another company''s table (composite FK)');
 
 -- Symmetric check from B's side.
 select test.login(test.id('adminB'));

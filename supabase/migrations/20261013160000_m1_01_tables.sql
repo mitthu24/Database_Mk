@@ -1,3 +1,5 @@
+begin;
+
 -- M1 / 01 — tenancy core tables.
 --
 -- STATUS: DRAFT — NOT APPLIED to any Supabase project. The live schema of
@@ -146,7 +148,9 @@ create table public.data_rows (
   table_id    uuid not null,
   row_order   bigint generated always as identity,
   data        jsonb not null default '{}'::jsonb,
-  created_by  uuid default auth.uid() references auth.users (id) on delete set null,
+  -- Attribution only. Deliberately NO foreign key: an FK to auth.users would
+  -- force a scan of this (large) table whenever a user is deleted.
+  created_by  uuid default auth.uid(),
   created_at  timestamptz not null default now(),
   updated_at  timestamptz not null default now(),
   constraint data_rows_table_fk foreign key (table_id, company_id)
@@ -222,3 +226,5 @@ create trigger audit_logs_no_truncate before truncate on public.audit_logs
 -- Trigger functions need no EXECUTE grant to fire; remove the default PUBLIC one.
 revoke all on function private.set_updated_at() from public, anon, authenticated;
 revoke all on function private.audit_logs_immutable() from public, anon, authenticated;
+
+commit;

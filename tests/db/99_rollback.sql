@@ -1,6 +1,7 @@
 -- Rollback script removes exactly the M1 objects (run last: it destroys the fixtures).
 -- (The refusal-without-confirmation check is done by scripts/test-db.sh.)
 
+select count(*) as users_before from auth.users \gset
 set app.confirm_m1_rollback = 'yes';
 \ir ../../supabase/rollback/20261013160000_m1_rollback.sql
 
@@ -24,5 +25,5 @@ select test.ok(
 select test.ok(not exists (select 1 from pg_trigger where tgname = 'on_auth_user_created'),
   'rollback removed the auth.users trigger');
 
-select test.ok((select count(*) from auth.users) = 10,
-  'rollback left auth.users untouched (10 fixture users still present)');
+select test.ok((select count(*) from auth.users) = :users_before,
+  'rollback left auth.users untouched (same user count before and after)');

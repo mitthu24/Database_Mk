@@ -1,3 +1,5 @@
+begin;
+
 -- M1 / 04 — auth trigger, registration + context + export-gate RPCs, founder ops.
 --
 -- STATUS: DRAFT — NOT APPLIED. See 01 for the review gate.
@@ -286,3 +288,5 @@ grant execute on function public.get_my_context() to authenticated;
 grant execute on function public.authorize_export(uuid) to authenticated;
 grant execute on function public.founder_set_company_status(uuid, text, text) to authenticated;
 grant execute on function public.founder_set_subscription(uuid, text, text, timestamptz, timestamptz) to authenticated;
+
+commit;
