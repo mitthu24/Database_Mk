@@ -107,6 +107,17 @@ select test.ok((public.query_rows(test.id('inv'), null, '[]', 'qty', 'desc', 0, 
 select test.ok((public.query_rows(test.id('inv'), null, '[]', 'qty', 'asc', 0, 3) -> 'rows' -> 0 -> 'data' ->> 'qty')::int = 1
                and (public.query_rows(test.id('inv'), null, '[]', 'qty', 'asc', 0, 40) -> 'rows' -> 9 -> 'data' ->> 'qty')::int = 9,
   'numeric sort asc is numeric, not lexical (9 before 10)');
+-- explicit JSON nulls and missing keys both sort last, in both directions
+select public.insert_row(test.id('inv'), '{"sku":"NULLQTY","qty":null}');
+select public.insert_row(test.id('inv'), '{"sku":"NOQTY"}');
+select test.ok((public.query_rows(test.id('inv'), null, '[]', 'qty', 'asc', 0, 40) -> 'rows' -> 31 -> 'data' ->> 'sku') in ('NULLQTY', 'NOQTY')
+               and (public.query_rows(test.id('inv'), null, '[]', 'qty', 'asc', 0, 40) -> 'rows' -> 0 -> 'data' ->> 'qty')::int = 1,
+  'ascending sort puts null and missing values last');
+select test.ok((public.query_rows(test.id('inv'), null, '[]', 'qty', 'desc', 0, 40) -> 'rows' -> 31 -> 'data' ->> 'sku') in ('NULLQTY', 'NOQTY')
+               and (public.query_rows(test.id('inv'), null, '[]', 'qty', 'desc', 0, 40) -> 'rows' -> 0 -> 'data' ->> 'qty')::int = 29,
+  'descending sort also puts null and missing values last');
+select public.delete_rows(test.id('inv'), array(select (r ->> 'id')::uuid from jsonb_array_elements(public.query_rows(test.id('inv'), 'NOQTY') -> 'rows') r));
+select public.delete_rows(test.id('inv'), array(select (r ->> 'id')::uuid from jsonb_array_elements(public.query_rows(test.id('inv'), 'NULLQTY') -> 'rows') r));
 select test.throws($$select public.query_rows(test.id('inv'), null, '[]', 'qty; drop table x', 'asc')$$, '22023', 'invalid sort key rejected');
 select test.throws($$select public.query_rows(test.id('inv'), null, '[]', 'qty', 'sideways')$$, '22023', 'invalid sort direction rejected');
 select test.throws($$select public.query_rows(test.id('inv'), null, '[{"key":"qty","op":"drop","value":"1"}]')$$, '22023', 'unknown filter operator rejected');

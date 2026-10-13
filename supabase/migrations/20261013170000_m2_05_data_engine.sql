@@ -464,8 +464,9 @@ begin
     select f.*, count(*) over () as total,
            row_number() over (
              order by
-               case when p_sort_key is not null and v_dir = 'asc'  then f.data -> p_sort_key end asc nulls last,
-               case when p_sort_key is not null and v_dir = 'desc' then f.data -> p_sort_key end desc nulls last,
+               -- nullif: an explicit JSON null sorts like a missing value (last), never first
+               case when p_sort_key is not null and v_dir = 'asc'  then nullif(f.data -> p_sort_key, 'null'::jsonb) end asc nulls last,
+               case when p_sort_key is not null and v_dir = 'desc' then nullif(f.data -> p_sort_key, 'null'::jsonb) end desc nulls last,
                f.row_order asc
            ) as rn
     from filtered f
