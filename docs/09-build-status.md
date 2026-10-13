@@ -59,7 +59,34 @@ mock-conformance suite ported from `tests/db/`, and employee-management UI
 | Forgot/reset password, resend confirmation, account & company profile | ✅ (unit, mocked) | - | ❌ not exercised in a browser | ❌ | ❌ | ❌ |
 | `npm run typecheck` / `npm run lint` / `npm run build` | ✅ all pass | - | - | - | - | - |
 
-## M3-M9
+## M4 — Company dashboard & table explorer
+
+Table library (`/tables`, search via card grid, create-table dialog with a
+dynamic column builder) and the table detail grid (`/tables/[id]`): sticky
+header, mouse-drag column resizing, server-side pagination/sort/search,
+row add/edit dialog (typed inputs per column type), bulk row selection with a
+confirmed delete, a per-row context menu, rename/schema-editor dialogs, and
+`AlertDialog`-confirmed clear-data/drop-table actions. All of it goes through
+`src/lib/tables/actions.ts`, thin server-action wrappers over `DataPort` that
+re-throw `BackendError` as UI-safe messages; authorization itself is the
+backend's (RLS / mock), never the UI's.
+
+Browser-verified against the mock backend (Chromium, manual Playwright smoke
+script, not yet a committed test suite): signed in as the seeded personas,
+created a table, added a row, renamed it, edited its schema, cleared its
+data, paginated and sorted the seeded 250-row Orders table, and confirmed
+that a view+export-only employee (Vic) sees only their granted table with no
+add-row control, matching the access flags the backend returned.
+
+| Check | Unit | Local PG | Browser | Hosted Supabase | Preview | Prod |
+|---|---|---|---|---|---|---|
+| Table/row actions (validation, error mapping) | ✅ | n/a (SQL side covered in M2's 444 assertions) | - | - | - | - |
+| Table library, grid, dialogs, permission-aware UI | - | - | ✅ manual smoke run against the mock backend | ❌ | ❌ | ❌ |
+
+Not yet in a committed Playwright suite (that is M9's job): the manual smoke
+run above is real browser evidence, not a regression test.
+
+## M3, M5-M9
 
 Not started. See `docs/08-milestones.md` for scope.
 

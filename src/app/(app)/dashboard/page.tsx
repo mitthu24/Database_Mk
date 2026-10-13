@@ -76,13 +76,15 @@ async function DashboardContent() {
               </Badge>
             </div>
           </CardHeader>
-          <CardContent className="pb-6 text-sm text-muted-foreground">
+          <CardContent className="flex flex-col gap-3 pb-6 text-sm text-muted-foreground">
             {daysLeft !== null && ctx.access === "full" ? (
               <p>
                 Free trial: <span className="font-medium text-foreground">{daysLeft} {daysLeft === 1 ? "day" : "days"}</span> remaining.
               </p>
             ) : null}
-            <p className="mt-2">Table management arrives in the next milestone.</p>
+            <Button asChild variant="accent" className="self-start">
+              <Link href="/tables">Open tables</Link>
+            </Button>
           </CardContent>
         </Card>
       )}
