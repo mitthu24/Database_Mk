@@ -30,9 +30,13 @@ select 'nobody but the owner holds any privilege on public.founders (incl. servi
                    where table_schema = 'public' and table_name = 'founders'
                      and grantee in ('anon','authenticated','service_role','public'))
 union all
-select 'service_role can only INSERT into audit_logs',
-       (select coalesce(array_agg(privilege_type::text order by privilege_type::text), '{}'::text[]) from information_schema.role_table_grants
-         where grantee = 'service_role' and table_schema = 'public' and table_name = 'audit_logs') = array['INSERT']
+select 'service_role holds exactly: company_members S/I/U/D and audit_logs INSERT (nothing on customer data)',
+       (select array_agg(table_name::text || ':' || privilege_type::text order by table_name::text, privilege_type::text)
+          from information_schema.role_table_grants
+         where grantee = 'service_role' and table_schema = 'public'
+           and table_name in ('profiles','founders','companies','company_members','subscriptions',
+                              'table_metadata','data_permissions','data_rows','audit_logs'))
+       = array['audit_logs:INSERT','company_members:DELETE','company_members:INSERT','company_members:SELECT','company_members:UPDATE']
 union all
 select 'no function in public/private is executable by PUBLIC or anon',
        not exists (select 1 from pg_proc p join pg_namespace n on n.oid = p.pronamespace

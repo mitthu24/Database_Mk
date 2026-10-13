@@ -40,3 +40,7 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# supabase cli local state (written by `supabase link`: project ref, connection info)
+/supabase/.temp/
+/supabase/.branches/

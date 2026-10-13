@@ -15,6 +15,7 @@ Approved product defaults applied: expired trials read-only (view + export, all 
 | F3 | RLS on `data_rows` called permission functions once per row | Benchmark, 200k rows, local PG16: filtered scan **2,181 ms**, employee full count **4,694 ms** | Policies use one uncorrelated `table_id in (select private.accessible_table_ids(...))` (hashed SubPlan): **124 ms** and **101 ms**; first-page queries stay ~1 ms. All behavioural assertions unchanged. Indicative only (local PostgreSQL) — re-measure on Supabase |
 | F4 | Nothing stopped a Vercel preview from using the production DB, or production from running against an unverified project | New `src/lib/supabase/config.ts`, 16 unit tests, and three simulated environments run against a live `next start` | Fail-closed guard: production needs `PRODUCTION_SUPABASE_PROJECT_REF` and an exact `https://<ref>.supabase.co` match; any other environment is rejected if it points at that ref; production also needs an explicit `https` `NEXT_PUBLIC_SITE_URL` (no localhost fallback in email links) |
 | F5 | `/setup` (M0) was prerendered at build time (stale snapshot) and showed configuration state in production | Route table showed `○` | Now dynamic, and returns no diagnostic content in production (verified: nothing in the payload) |
+| F7 | Server-side provisioning relied on Supabase default grants for `service_role`; on a new project (no default grants) it fails with `permission denied for table company_members`, and on a legacy project `service_role` could read all customer rows | Suite run in a new "no default grants" mode failed on the new service_role test; legacy mode failed the least-privilege test | `service_role` is revoked everywhere and granted exactly `company_members` S/I/U/D + `audit_logs` INSERT (pinned by test and by `m1-post-apply-verification.sql`); the suite now runs in both modes |
 | F6 | Write-path coverage under trial expiry/suspension was by example only | — | Pinned inventory of everything `authenticated` may write (fails if a new write path appears), policy-text assertion that every write policy on company data requires the entitlement check, and systematic expired/suspended attempts for an admin and for an employee holding create/edit/delete grants |
 
 ## Audit checklist (task 2)
@@ -36,7 +37,7 @@ Approved product defaults applied: expired trials read-only (view + export, all 
 
 ## Open items (cannot be closed locally)
 1. `private` must not be an exposed API schema, and the real PostgREST role switch, default grants and `auth.users` shape are only emulated. Close with `m1-post-apply-verification.sql` + REST probes on a dev project.
-2. How the Supabase CLI wraps migration files (explicit `begin/commit` is expected to be fine) — confirm on dev.
+2. ~~How the Supabase CLI wraps migration files~~ — **verified locally** with the real CLI 2.120.0 (`npm run test:cli-runner`): explicit `begin/commit` is compatible and atomic. Remaining: re-run on dev with your CLI version; the unreproduced upstream history-gap window (#6959) is covered by `migration repair`.
 3. A failure inside the `auth.users` trigger would break **all** signups — test on dev; monitor after release.
 4. Access resumption currently depends only on the founder RPC `founder_set_subscription`. Your rule ("only after a valid subscription **and** any required manual payment is approved") needs `manual_payments` (M6): its approval function must become the **only** way to move a subscription to `active`, and direct founder activation should then be removed or audited as an override.
 5. Any future service-role code path bypasses RLS and must re-check entitlement itself (as `provisionEmployee` does). M4 import/replace functions must check `company_can_write` plus the `import` permission (append) or admin (replace-all).
@@ -52,7 +53,8 @@ Approved product defaults applied: expired trials read-only (view + export, all 
 | `npm run typecheck` (`next typegen && tsc --noEmit`, from a clean checkout) | pass |
 | `npm run lint` | pass |
 | `npm test` | **65 passed** (route guard, redirect safety, Zod schemas, error mapping, context parsing, employee provisioning with mocks, environment guard) |
-| `npm run test:db` | **217 assertions passed** on local PostgreSQL 16.15 behind a Supabase emulation harness (includes rollback and the migration-atomicity scenario) |
+| `npm run test:db` | **453 assertions passed** across two modes (no default grants / legacy default grants) on local PostgreSQL 16.15 behind a Supabase emulation harness (includes rollback and the migration-atomicity scenario) |
+| `npm run test:cli-runner` | real Supabase CLI 2.120.0 `db push` against local PostgreSQL: apply, history, no-op re-push, mid-file failure, history-gap repair, 220 RLS assertions + post-apply verification on the CLI-applied schema — pass in both modes |
 | `docs/m1-post-apply-verification.sql` run against the migrated local schema | 13/13 checks `true` (the "private not exposed" row is only meaningful on Supabase) |
 | `npm run build` | pass |
 | Secret sweeps | temporary founder password: 0 occurrences in tree and in all Git history; no key-like strings; only `.env.example` tracked; no `SERVICE_ROLE`/admin-client/invite/`grant_founder` strings in the built browser JS |

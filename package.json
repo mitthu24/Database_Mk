@@ -9,7 +9,8 @@
     "lint": "eslint",
     "typecheck": "next typegen && tsc --noEmit",
     "test": "vitest run",
-    "test:db": "bash scripts/test-db.sh"
+    "test:db": "bash scripts/test-db.sh",
+    "test:cli-runner": "bash scripts/test-cli-runner.sh"
   },
   "dependencies": {
     "@radix-ui/react-slot": "^1.5.0",

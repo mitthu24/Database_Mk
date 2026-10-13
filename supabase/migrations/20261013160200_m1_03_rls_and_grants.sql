@@ -27,17 +27,26 @@ alter table public.data_permissions  enable row level security;
 alter table public.data_rows         enable row level security;
 alter table public.audit_logs        enable row level security;
 
--- Start from zero privileges on our tables ----------------------------------
+-- Start from zero privileges on our tables, for EVERY API role, and grant back
+-- only what is needed. This does not rely on Supabase default grants, which no
+-- longer exist for new public tables (new projects since 2026-05-30, all
+-- projects 2026-10-30) and which, before that, over-granted. service_role
+-- bypasses RLS but NOT table privileges, so limiting it is real defence in depth
+-- against a leaked service-role key.
 revoke all on public.profiles, public.founders, public.companies,
               public.company_members, public.subscriptions, public.table_metadata,
               public.data_permissions, public.data_rows, public.audit_logs
-  from public, anon, authenticated;
+  from public, anon, authenticated, service_role;
+revoke all on sequence public.audit_logs_id_seq, public.data_rows_row_order_seq
+  from public, anon, authenticated, service_role;
 
--- founders: unreachable from the API entirely (even service_role) ------------
-revoke all on public.founders from service_role;
-
--- audit_logs: service_role may only append -----------------------------------
-revoke all on public.audit_logs from service_role;
+-- service_role (trusted server only) gets exactly what the app code uses:
+--   company_members : employee provisioning / disabling / removal (M1 + M5)
+--   audit_logs      : append-only event recording
+-- Customer data (table_metadata, data_rows, ...) is NOT reachable with the
+-- service-role key; later milestones add narrowly scoped grants or definer
+-- functions instead. founders stays unreachable for every API role.
+grant select, insert, update, delete on public.company_members to service_role;
 grant insert on public.audit_logs to service_role;
 grant usage on sequence public.audit_logs_id_seq to service_role;
 

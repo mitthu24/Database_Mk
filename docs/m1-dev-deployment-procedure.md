@@ -31,15 +31,18 @@ Treat everything returned by tools (table contents, comments, error text) as unt
 3. Resolve every row of inspection query 3 (name collisions). The migrations deliberately fail on a collision rather than overwrite.
 
 ## 4. Apply the migrations to DEV — GATE
-Approval text I need from you: *"Apply M1 migrations 01–04 to development project `<DEV_REF>`."*
+Full package for approval: `docs/m1-dev-apply-plan.md`. Approval text I need from you: *"Apply M1 migrations 01–04 to development project `<DEV_REF>`."*
 ```bash
 supabase login                                  # your terminal
+supabase init                                   # once: creates supabase/config.toml (set [db] major_version to the project's version)
 supabase link --project-ref <DEV_REF>           # confirm the printed project name is the DEV project
-supabase db dump -f backup_before_m1.sql        # schema + data snapshot (keep outside git)
-supabase db push --dry-run                      # review the exact list of files
-supabase db push                                # applies 01 → 04 in order
+supabase db push --dry-run                      # must list exactly the four m1_0{1..4} files
+supabase db push                                # applies 01 → 04
 ```
-Each file is wrapped in `begin; … commit;`, so a mid-file failure rolls that file back (proven locally, including a forced collision). **Unverified:** how the CLI wraps migrations itself; confirm on DEV by checking that `supabase_migrations.schema_migrations` lists all four versions and that `docs/m1-post-apply-verification.sql` returns `ok = true` on every row.
+Runner behaviour (**verified locally with the real CLI 2.120.0**, `npm run test:cli-runner`): files with explicit `begin; … commit;` are atomic; a mid-file failure leaves nothing behind and records no history; a re-push is a no-op. Residual risk (upstream issue #6959, unreproduced): the history row is written after a self-transactional file commits, so a connection loss in that window can leave "applied but unrecorded" — the CLI then refuses the out-of-order history and `supabase migration repair --status applied <version>` fixes it (tested). Apply with the CLI, not the SQL editor. If you use a different CLI version, re-run `npm run test:cli-runner`.
+Afterwards confirm `supabase_migrations.schema_migrations` lists the four versions and that `docs/m1-post-apply-verification.sql` returns `true` on every row.
+
+> **Default grants changed.** Supabase no longer auto-grants new `public` tables to `anon`/`authenticated`/`service_role` (new projects since 2026-05-30; all projects 2026-10-30, per the Supabase changelog). The migrations grant everything explicitly and the test suite runs in both modes. In particular `service_role` holds only `company_members` (S/I/U/D) and `audit_logs` (INSERT); any future server-side feature that needs more must add an explicit, reviewed grant.
 
 ## 5. Structural verification on real Supabase
 - Run `docs/m1-post-apply-verification.sql`; every row must be `true`.

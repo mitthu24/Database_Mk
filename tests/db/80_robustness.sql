@@ -148,3 +148,36 @@ select test.logout();
 select test.login(test.id('founder'));
 select public.founder_set_company_status(test.id('companyA'), 'active', 'robustness test done');
 select test.logout();
+
+-- ---- service_role (trusted server): exactly the privileges the app needs --------
+-- provisionEmployee() inserts a membership and an audit row with the service-role
+-- key. These must work WITHOUT relying on Supabase default grants (which no longer
+-- exist for new tables), and service_role must not hold anything it does not need.
+select test.service();
+select test.ok(test.affected($$insert into public.company_members (company_id, user_id, role, employee_code, created_by)
+                               values (test.id('companyA'), 'd0000000-0000-0000-0000-000000000001', 'employee', 'SVC-001', test.id('adminA'))$$) = 1,
+  'service_role can insert a company membership (employee provisioning)');
+select test.ok(test.affected($$update public.company_members set status = 'disabled' where user_id = 'd0000000-0000-0000-0000-000000000001'$$) = 1,
+  'service_role can disable a membership');
+select test.ok(test.affected($$delete from public.company_members where user_id = 'd0000000-0000-0000-0000-000000000001'$$) = 1,
+  'service_role can remove a membership');
+select test.ok(test.affected($$insert into public.audit_logs (company_id, actor_id, action) values (test.id('companyA'), test.id('adminA'), 'employee.provisioned')$$) = 1,
+  'service_role can append audit events');
+select test.throws('select 1 from public.data_rows', '42501', 'service_role has no access to customer data rows');
+select test.throws('select 1 from public.table_metadata', '42501', 'service_role has no access to table definitions');
+select test.throws($$update public.subscriptions set status = 'active'$$, '42501', 'service_role cannot alter subscriptions');
+select test.throws($$update public.companies set status = 'suspended'$$, '42501', 'service_role cannot alter company status directly');
+select test.throws('select 1 from public.founders', '42501', 'service_role cannot touch founders');
+select test.logout();
+
+do $$
+declare actual text[];
+begin
+  select array_agg(table_name || ':' || privilege_type order by table_name, privilege_type) into actual
+  from information_schema.role_table_grants
+  where grantee = 'service_role' and table_schema = 'public';
+  if actual is distinct from array['audit_logs:INSERT','company_members:DELETE','company_members:INSERT','company_members:SELECT','company_members:UPDATE'] then
+    raise exception 'FAIL: service_role privilege inventory changed: %', actual;
+  end if;
+  raise notice 'PASS: the exact table privileges of service_role are the reviewed, pinned set';
+end $$;

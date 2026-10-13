@@ -37,6 +37,7 @@ To unblock Phase 2:
 | Granular permissions: view / create / edit / delete / import / export per employee per table | Required by Phase 8; export/import/delete/etc. imply `can_view` (CHECK constraint) |
 | Composite FKs `(table_id, company_id)` and `(company_id, user_id)` | Cross-tenant rows (a permission or data row pointing at another company's table/user) are structurally impossible, not just policy-blocked |
 | Helper functions in a non-exposed `private` schema | They cannot be called as API endpoints; only RLS uses them |
+| `service_role` is limited to `company_members` (S/I/U/D) and `audit_logs` (INSERT); no customer-data access | Supabase no longer auto-grants new tables; least privilege if the service key leaks |
 | Customer tables stay **logical**: metadata + JSONB rows, no per-customer physical tables | As in `docs/03` |
 | Audit log has no FK to companies/users and is append-only (privileges + trigger) | History survives deletions and cannot be rewritten by anyone, including service_role |
 
@@ -154,7 +155,8 @@ Suggested workflow once approved: `supabase link --project-ref evgwjbyrmuljrccgt
 | `npm run typecheck` | `tsc --noEmit` | pass |
 | `npm run lint` | ESLint | pass |
 | `npm test` | Vitest unit tests (route guard, redirect safety, Zod schemas, error mapping, context parsing, employee provisioning with mocks, Supabase environment guard) | **65 passed** |
-| `npm run test:db` | Applies the migrations to a throwaway local PostgreSQL 16 cluster behind a Supabase emulation harness and runs the RLS suite, the rollback, and a migration-atomicity scenario | **217 assertions passed** |
+| `npm run test:db` | Applies the migrations to a throwaway local PostgreSQL 16 cluster behind a Supabase emulation harness and runs the RLS suite, the rollback, and a migration-atomicity scenario, in two modes (no default grants / legacy default grants) | **453 assertions passed** |
+| `npm run test:cli-runner` | Applies the migrations with the real Supabase CLI (`db push`) to local PostgreSQL and re-runs the suite on the result | pass (CLI 2.120.0, both modes) |
 | `npm run build` | Production build | pass |
 
 DB suite covers: profile creation (and hostile signup metadata ignored); registration atomicity (forced mid-registration failure leaves nothing behind); 30-day trial from the server clock; trial expiry → read-only → paid → lapse; suspension and restore; founder isolation (no access to customer data, no direct writes, unprovisioned/revoked users powerless, `founders` unreachable even by `service_role`); company-admin limits (cannot touch status/plan/trial/memberships/audit); **two companies** with cross-tenant read/write/IDOR attempts in both directions; employees with **edit**, **view-only**, **view+export** and **no** grants, plus a disabled member and an employee of the other company; unauthorized API access as `anon`; structural checks (RLS on every table, no `PUBLIC`/`anon` function execute, empty `search_path` on every definer function, column-level write surface); rollback.

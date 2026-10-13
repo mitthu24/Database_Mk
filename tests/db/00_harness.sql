@@ -49,14 +49,11 @@ grant select, insert on auth.users to supabase_auth_admin;
 grant execute on function auth.uid() to anon, authenticated, service_role;
 grant usage on schema public to anon, authenticated, service_role;
 
--- Supabase's permissive defaults: every new public table/sequence/function is
--- granted to the API roles. The migrations must narrow these explicitly.
-alter default privileges for role postgres in schema public
-  grant all on tables to anon, authenticated, service_role;
-alter default privileges for role postgres in schema public
-  grant all on sequences to anon, authenticated, service_role;
-alter default privileges for role postgres in schema public
-  grant all on functions to anon, authenticated, service_role;
+-- NOTE: no default privileges are emulated here. Supabase stopped auto-granting
+-- new public tables to the API roles (new projects since 2026-05-30, all
+-- projects 2026-10-30), so the migrations must grant everything explicitly.
+-- tests/db/00a_legacy_default_grants.sql emulates the OLD permissive defaults;
+-- scripts/test-db.sh runs the whole suite in BOTH modes.
 
 -- ---------------------------------------------------------------------------
 -- Test helpers (schema "test" is callable by every role under test)
