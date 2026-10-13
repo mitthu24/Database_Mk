@@ -40,11 +40,14 @@ either backend. `provisionEmployee` invites via `authAdmin.inviteUser` and
 attaches the membership via `data.addMember`, which re-verifies the caller's
 admin/entitlement status itself; on failure the invited auth user is deleted.
 
-Still open from M2: forgot/reset-password UI, resend-confirmation UI, company
-profile / account settings pages, toast provider, remaining UI kit pieces
-(dialog, dropdown/context menu, tabs, skeleton, table, select, textarea,
-checkbox), `error.tsx` (`retry` prop) / `not-found` / `loading` states, and a
-mock-conformance suite ported more completely from `tests/db/`.
+Forgot/reset-password, resend-confirmation, account settings (display name)
+and company profile pages are built, wired through the backend port, and
+covered by unit tests. The remaining UI kit (dialog, alert-dialog,
+dropdown-menu, tabs, select, checkbox, textarea, skeleton, table) and a
+sonner toaster are in; `error.tsx` (Next 16 `retry` prop), `not-found.tsx`,
+`loading.tsx`, and `/unavailable` are in place. Still open: a more complete
+mock-conformance suite ported from `tests/db/`, and employee-management UI
+(M6) still uses the plain `provisionEmployee` action with no dedicated page.
 
 | Check | Unit | Local PG | Browser | Hosted Supabase | Preview | Prod |
 |---|---|---|---|---|---|---|
@@ -53,6 +56,7 @@ mock-conformance suite ported more completely from `tests/db/`.
 | Mock backend (29 conformance scenarios) | ✅ | n/a (proves logic, not Postgres/RLS) | - | - | - | - |
 | Backend port + Supabase adapter (Zod-validated) | ✅ (contract fixtures) | - | ❌ not exercised against a live project | ❌ | ❌ | ❌ |
 | Auth actions / DAL / provision-employee on the port | ✅ (unit, mocked) | - | ❌ | ❌ | ❌ | ❌ |
+| Forgot/reset password, resend confirmation, account & company profile | ✅ (unit, mocked) | - | ❌ not exercised in a browser | ❌ | ❌ | ❌ |
 | `npm run typecheck` / `npm run lint` / `npm run build` | ✅ all pass | - | - | - | - | - |
 
 ## M3-M9
