@@ -1,10 +1,11 @@
 import { NextResponse, type NextRequest } from "next/server";
 
+import { getBackend } from "@/lib/backend";
+import { BackendError } from "@/lib/backend/port";
 import { safeNextPath } from "@/lib/auth/validation";
-import { createClient } from "@/lib/supabase/server";
 
-// Landing point of the email-confirmation link (PKCE flow): exchanges the
-// one-time code for a session cookie, then sends the user on. `next` is
+// Landing point of email links (confirmation, invite, password reset - PKCE):
+// exchanges the one-time code for a session, then sends the user on. `next` is
 // restricted to same-origin relative paths to prevent open redirects.
 export async function GET(request: NextRequest) {
   const { searchParams, origin } = request.nextUrl;
@@ -12,10 +13,16 @@ export async function GET(request: NextRequest) {
   const next = safeNextPath(searchParams.get("next"), "/onboarding");
 
   if (code) {
-    const supabase = await createClient();
-    const { error } = await supabase.auth.exchangeCodeForSession(code);
-    if (!error) return NextResponse.redirect(`${origin}${next}`);
+    try {
+      const backend = await getBackend();
+      if (await backend.auth.exchangeCode(code)) return NextResponse.redirect(`${origin}${next}`);
+    } catch (error) {
+      if (error instanceof BackendError && error.kind === "unavailable") {
+        return NextResponse.redirect(`${origin}/unavailable`);
+      }
+      throw error;
+    }
   }
 
-  return NextResponse.redirect(`${origin}/login?error=confirmation`);
+  return NextResponse.redirect(`${origin}/login?error=link`);
 }

@@ -1,12 +1,12 @@
 "use server";
 
-import { createClient as createStatelessClient } from "@supabase/supabase-js";
 import { redirect } from "next/navigation";
 
 import { getAuthUser, requireUser } from "@/lib/auth/dal";
 import {
   changePasswordSchema,
   companySchema,
+  emailSchema,
   fieldErrorsFrom,
   friendlyAuthError,
   loginSchema,
@@ -14,18 +14,30 @@ import {
   safeNextPath,
   type ActionState,
 } from "@/lib/auth/validation";
-import { getSiteUrl, getSupabaseConfig, requireSupabaseConfig } from "@/lib/supabase/config";
-import { createClient } from "@/lib/supabase/server";
+import { getBackend, resolveBackendMode } from "@/lib/backend";
+import { BackendError } from "@/lib/backend/port";
+import { getSiteUrl } from "@/lib/supabase/config";
 
 const GENERIC_ERROR = "Something went wrong. Please try again.";
 
 function isConfigured() {
-  return getSupabaseConfig().ok;
+  const mode = resolveBackendMode();
+  return mode.mode === "supabase" || mode.mode === "mock";
 }
 
 const NOT_CONFIGURED: ActionState = {
   message: "The server is not configured yet. Ask the administrator to complete the setup.",
 };
+
+async function unavailableSafe<T>(work: () => Promise<T>): Promise<T | typeof GENERIC_STATE> {
+  try {
+    return await work();
+  } catch (error) {
+    if (error instanceof BackendError && error.kind === "unavailable") return GENERIC_STATE;
+    throw error;
+  }
+}
+const GENERIC_STATE: ActionState = { message: GENERIC_ERROR };
 
 export async function signIn(_prev: ActionState | undefined, formData: FormData): Promise<ActionState> {
   if (!isConfigured()) return NOT_CONFIGURED;
@@ -36,14 +48,15 @@ export async function signIn(_prev: ActionState | undefined, formData: FormData)
   });
   if (!parsed.success) return { fieldErrors: fieldErrorsFrom(parsed.error) };
 
-  const supabase = await createClient();
-  const { error } = await supabase.auth.signInWithPassword(parsed.data);
-  if (error) {
-    // Never distinguish "unknown email" from "wrong password".
-    return { message: friendlyAuthError(error) };
-  }
-
-  redirect(safeNextPath(formData.get("next")));
+  return unavailableSafe(async () => {
+    const backend = await getBackend();
+    const result = await backend.auth.signInWithPassword(parsed.data.email, parsed.data.password);
+    if (!result.ok) {
+      // Never distinguish "unknown email" from "wrong password".
+      return { message: friendlyAuthError(result.code) };
+    }
+    redirect(safeNextPath(formData.get("next")));
+  });
 }
 
 export async function signUp(_prev: ActionState | undefined, formData: FormData): Promise<ActionState> {
@@ -58,31 +71,34 @@ export async function signUp(_prev: ActionState | undefined, formData: FormData)
   if (!parsed.success) return { fieldErrors: fieldErrorsFrom(parsed.error) };
   const { fullName, companyName, email, password } = parsed.data;
 
-  const supabase = await createClient();
-  const { data, error } = await supabase.auth.signUp({
-    email,
-    password,
-    options: {
-      // Only descriptive values. Roles and company ids are never accepted from
-      // signup metadata (the database trigger ignores everything but full_name).
-      data: { full_name: fullName, pending_company_name: companyName },
-      emailRedirectTo: `${getSiteUrl()}/auth/callback?next=/onboarding`,
-    },
+  return unavailableSafe(async () => {
+    const backend = await getBackend();
+    const result = await backend.auth.signUp({
+      email,
+      password,
+      fullName,
+      companyName,
+      redirectTo: `${getSiteUrl()}/auth/callback?next=/onboarding`,
+    });
+    if (!result.ok) return { message: friendlyAuthError(result.code) };
+
+    if (result.sessionStarted) {
+      // Email confirmation was not required (or this is the mock backend): the
+      // user is signed in, so the company can be created right away.
+      try {
+        await backend.data.registerCompany(companyName);
+      } catch {
+        // Fall through to onboarding either way; the user can retry there.
+      }
+      redirect("/dashboard");
+    }
+
+    // Same response whether or not the address already has an account.
+    return {
+      ok: true,
+      message: "Check your email to confirm your address. After confirming, you will finish creating your company.",
+    };
   });
-  if (error) return { message: friendlyAuthError(error) };
-
-  if (data.session) {
-    // Email confirmation is disabled for this project: the user is signed in,
-    // so the company can be created right away (atomic RPC).
-    const { error: rpcError } = await supabase.rpc("register_company", { p_name: companyName });
-    redirect(rpcError ? "/onboarding" : "/dashboard");
-  }
-
-  // Same response whether or not the address already has an account.
-  return {
-    ok: true,
-    message: "Check your email to confirm your address. After confirming, you will finish creating your company.",
-  };
 }
 
 export async function registerCompany(_prev: ActionState | undefined, formData: FormData): Promise<ActionState> {
@@ -91,26 +107,24 @@ export async function registerCompany(_prev: ActionState | undefined, formData: 
   const parsed = companySchema.safeParse({ companyName: formData.get("companyName") });
   if (!parsed.success) return { fieldErrors: fieldErrorsFrom(parsed.error) };
 
-  const supabase = await createClient();
-  const { error } = await supabase.rpc("register_company", { p_name: parsed.data.companyName });
-
-  if (error) {
-    if (error.code === "23505") redirect("/dashboard"); // already belongs to a company
-    if (error.code === "42501") {
-      return { message: "Confirm your email address before creating a company." };
+  return unavailableSafe(async () => {
+    const backend = await getBackend();
+    try {
+      await backend.data.registerCompany(parsed.data.companyName);
+    } catch (error) {
+      if (!(error instanceof BackendError)) throw error;
+      if (error.kind === "conflict") redirect("/dashboard"); // already belongs to a company
+      if (error.kind === "forbidden") return { message: "Confirm your email address before creating a company." };
+      if (error.kind === "invalid") return { fieldErrors: { companyName: [error.message] } };
+      return { message: GENERIC_ERROR };
     }
-    if (error.code === "22023") {
-      return { fieldErrors: { companyName: ["Company name must be 2-120 characters."] } };
-    }
-    return { message: GENERIC_ERROR };
-  }
-
-  redirect("/dashboard");
+    redirect("/dashboard");
+  });
 }
 
 export async function signOut() {
-  const supabase = await createClient();
-  await supabase.auth.signOut();
+  const backend = await getBackend();
+  await backend.auth.signOut();
   redirect("/login");
 }
 
@@ -125,28 +139,69 @@ export async function changePassword(_prev: ActionState | undefined, formData: F
   });
   if (!parsed.success) return { fieldErrors: fieldErrorsFrom(parsed.error) };
 
-  // Re-authenticate with the CURRENT password on a throwaway client that keeps
-  // no session, so the real session cookies are untouched by this check.
-  const { url, anonKey } = requireSupabaseConfig();
-  const verifier = createStatelessClient(url, anonKey, {
-    auth: { persistSession: false, autoRefreshToken: false, detectSessionInUrl: false },
+  return unavailableSafe(async () => {
+    const backend = await getBackend();
+
+    // Re-authenticate with the CURRENT password without touching the real session.
+    const verify = await backend.auth.verifyPassword(user.email!, parsed.data.currentPassword);
+    if (!verify.ok) {
+      return verify.code === "invalid_credentials"
+        ? { fieldErrors: { currentPassword: ["Current password is incorrect."] } }
+        : { message: friendlyAuthError(verify.code) };
+    }
+
+    const result = await backend.auth.updatePassword(parsed.data.newPassword);
+    if (!result.ok) return { message: friendlyAuthError(result.code) };
+
+    // Invalidate every other device/session that knew the old password.
+    await backend.auth.signOut("others");
+
+    return { ok: true, message: "Password updated. Other devices have been signed out." };
   });
-  const { error: verifyError } = await verifier.auth.signInWithPassword({
-    email: user.email,
-    password: parsed.data.currentPassword,
+}
+
+export async function requestPasswordReset(_prev: ActionState | undefined, formData: FormData): Promise<ActionState> {
+  if (!isConfigured()) return NOT_CONFIGURED;
+
+  const parsed = emailSchema.safeParse(formData.get("email"));
+  if (!parsed.success) return { fieldErrors: { email: fieldErrorsFrom(parsed.error).email ?? ["Enter a valid email address."] } };
+
+  return unavailableSafe(async () => {
+    const backend = await getBackend();
+    await backend.auth.requestPasswordReset(parsed.data, `${getSiteUrl()}/auth/callback?next=/account/password/reset`);
+    // Always the same response: never reveal whether the address has an account.
+    return { ok: true, message: "If that address has an account, a reset link has been sent." };
   });
-  if (verifyError) {
-    return verifyError.code === "invalid_credentials"
-      ? { fieldErrors: { currentPassword: ["Current password is incorrect."] } }
-      : { message: friendlyAuthError(verifyError) };
-  }
+}
 
-  const supabase = await createClient();
-  const { error } = await supabase.auth.updateUser({ password: parsed.data.newPassword });
-  if (error) return { message: friendlyAuthError(error) };
+export async function resetPassword(_prev: ActionState | undefined, formData: FormData): Promise<ActionState> {
+  const parsed = changePasswordSchema.pick({ newPassword: true, confirmPassword: true }).safeParse({
+    newPassword: formData.get("newPassword"),
+    confirmPassword: formData.get("confirmPassword"),
+  });
+  if (!parsed.success) return { fieldErrors: fieldErrorsFrom(parsed.error) };
 
-  // Invalidate every other device/session that knew the old password.
-  await supabase.auth.signOut({ scope: "others" });
+  // The reset link's /auth/callback already exchanged the code for a session;
+  // from here this acts on whoever that session belongs to.
+  const user = await getAuthUser();
+  if (!user) return { message: "That reset link has expired. Request a new one." };
 
-  return { ok: true, message: "Password updated. Other devices have been signed out." };
+  return unavailableSafe(async () => {
+    const backend = await getBackend();
+    const result = await backend.auth.updatePassword(parsed.data.newPassword);
+    if (!result.ok) return { message: friendlyAuthError(result.code) };
+    redirect("/dashboard");
+  });
+}
+
+export async function resendConfirmation(_prev: ActionState | undefined, formData: FormData): Promise<ActionState> {
+  if (!isConfigured()) return NOT_CONFIGURED;
+  const parsed = emailSchema.safeParse(formData.get("email"));
+  if (!parsed.success) return { message: "Enter a valid email address." };
+
+  return unavailableSafe(async () => {
+    const backend = await getBackend();
+    await backend.auth.resendConfirmation(parsed.data, `${getSiteUrl()}/auth/callback?next=/onboarding`);
+    return { ok: true, message: "If that address needs confirming, a new link has been sent." };
+  });
 }

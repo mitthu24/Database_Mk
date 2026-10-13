@@ -12,7 +12,7 @@ async function OnboardingContent() {
   if (ctx.isFounder || ctx.companyId) redirect("/dashboard");
 
   const user = await getAuthUser();
-  const suggestion = user?.user_metadata?.pending_company_name;
+  const suggestion = user?.pendingCompanyName ?? undefined;
 
   return (
     <Card className="mx-auto max-w-md">
@@ -21,7 +21,7 @@ async function OnboardingContent() {
         <CardDescription>Your 30-day free trial starts when the company is created.</CardDescription>
       </CardHeader>
       <CardContent className="pb-6">
-        <CompanyForm defaultName={typeof suggestion === "string" ? suggestion : undefined} />
+        <CompanyForm defaultName={suggestion} />
       </CardContent>
     </Card>
   );

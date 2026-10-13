@@ -1,6 +1,8 @@
 import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
 
+import { resolveBackendMode } from "@/lib/backend/mode";
+import { MOCK_COOKIE } from "@/lib/backend/mock/store";
 import { getSupabaseConfig } from "@/lib/supabase/config";
 
 export type SessionRefresh = {
@@ -14,6 +16,12 @@ export type SessionRefresh = {
 // redirects in src/proxy.ts; it is not an authorization decision.
 export async function updateSession(request: NextRequest): Promise<SessionRefresh> {
   let response = NextResponse.next({ request });
+
+  // Explicit dev/test backend: the session is just the mock cookie.
+  const mode = resolveBackendMode();
+  if (mode.mode === "mock") {
+    return { response, isAuthenticated: Boolean(request.cookies.get(MOCK_COOKIE)?.value), supabaseConfigured: true };
+  }
 
   const config = getSupabaseConfig();
 

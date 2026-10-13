@@ -1,9 +1,12 @@
 import { z } from "zod";
 
+import type { AuthErrorCode } from "@/lib/backend/port";
+
 const email = z.preprocess(
   (v) => (typeof v === "string" ? v.trim().toLowerCase() : v),
   z.email("Enter a valid email address.").max(254, "Email address is too long."),
 );
+export const emailSchema = email;
 
 // 72 is the bcrypt input limit Supabase enforces.
 const newPassword = z
@@ -83,15 +86,13 @@ export function safeNextPath(raw: unknown, fallback = "/dashboard"): string {
   return raw;
 }
 
-// Map Supabase Auth errors to messages that reveal nothing about other accounts
-// or internals. Unknown errors become a generic message.
-export function friendlyAuthError(error: { code?: string; status?: number } | null | undefined): string {
-  switch (error?.code) {
+// Map normalized AuthErrorCodes to messages that reveal nothing about other
+// accounts or internals. Unknown/unavailable become a generic message.
+export function friendlyAuthError(code: AuthErrorCode | null | undefined): string {
+  switch (code) {
     case "email_not_confirmed":
       return "Confirm your email address first. Check your inbox for the confirmation link.";
-    case "over_request_rate_limit":
-    case "over_email_send_rate_limit":
-    case "over_sms_send_rate_limit":
+    case "rate_limited":
       return "Too many attempts. Please wait a few minutes and try again.";
     case "weak_password":
       return "That password is too weak. Use a longer, less common password.";
@@ -99,9 +100,11 @@ export function friendlyAuthError(error: { code?: string; status?: number } | nu
       return "Choose a password different from the current one.";
     case "invalid_credentials":
       return "Invalid email or password.";
+    case "session_required":
+      return "Your session has expired. Sign in again.";
+    case "unavailable":
+      return "The service is temporarily unavailable. Please try again shortly.";
     default:
-      return error?.status === 429
-        ? "Too many attempts. Please wait a few minutes and try again."
-        : "Something went wrong. Please try again.";
+      return "Something went wrong. Please try again.";
   }
 }

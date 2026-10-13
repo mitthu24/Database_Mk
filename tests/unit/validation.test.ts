@@ -128,14 +128,11 @@ describe("employeeSchema", () => {
 
 describe("friendlyAuthError", () => {
   it("never leaks provider messages", () => {
-    expect(friendlyAuthError({ code: "invalid_credentials" })).toBe("Invalid email or password.");
-    expect(friendlyAuthError({ code: "something_internal_with_details" })).toBe(
-      "Something went wrong. Please try again.",
-    );
+    expect(friendlyAuthError("invalid_credentials")).toBe("Invalid email or password.");
+    expect(friendlyAuthError("unknown")).toBe("Something went wrong. Please try again.");
     expect(friendlyAuthError(null)).toBe("Something went wrong. Please try again.");
   });
   it("maps rate limits", () => {
-    expect(friendlyAuthError({ code: "over_request_rate_limit" })).toMatch(/Too many attempts/);
-    expect(friendlyAuthError({ status: 429 })).toMatch(/Too many attempts/);
+    expect(friendlyAuthError("rate_limited")).toMatch(/Too many attempts/);
   });
 });
