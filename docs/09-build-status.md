@@ -213,7 +213,29 @@ to end (invite → create → redirect to its detail page with the right data).
 | Founder console pages (dashboard, companies, payments, audit, settings) | - | - | ✅ manual smoke (full click-through) | ❌ | ❌ | ❌ |
 | `await connection()` dynamic-rendering fix across all `(app)` pages | - | - | ✅ (`next build` route table + zero console warnings) | - | - | - |
 
-## M8-M9
+## M8 — Marketing site
+
+Public, unauthenticated pages under `src/app/(marketing)/`: landing (`/`),
+`/features`, `/use-cases`, `/how-it-works`, `/pricing`, `/faq`, `/contact`,
+sharing a `SiteHeader` (desktop nav + a working mobile hamburger menu) and
+`SiteFooter`. Every page has its own `metadata` (title/description, Open
+Graph on the landing page); `sitemap.ts` lists only the public paths and
+`robots.ts` disallows every authenticated area. No fabricated testimonials,
+customer logos, or metrics anywhere — pricing explicitly avoids inventing a
+number (trial terms are stated plainly; pricing beyond the trial says
+"contact us"), and the contact page uses a clearly-marked placeholder email
+with a comment to replace it before a real deployment.
+
+All seven marketing pages build as fully static (`○`), confirmed by `next
+build`'s route table, and were verified in a real browser at both desktop
+and mobile viewports: each page's heading, the mobile menu opening and
+navigating, and `/sitemap.xml` / `/robots.txt` serving correctly.
+
+| Check | Unit | Local PG | Browser | Hosted Supabase | Preview | Prod |
+|---|---|---|---|---|---|---|
+| Marketing pages, mobile nav, sitemap/robots | n/a (no logic to unit-test) | n/a | ✅ manual smoke (desktop + mobile viewport) | ❌ | ❌ | ❌ |
+
+## M9
 
 Not started. See `docs/08-milestones.md` for scope.
 

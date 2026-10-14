@@ -15,8 +15,13 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Tabular Data Management",
+  title: { default: "Tabular Data Management", template: "%s" },
   description: "Maintain your business data in secure, spreadsheet-style tables.",
+  openGraph: {
+    siteName: "Tabular Data Management",
+    type: "website",
+  },
+  twitter: { card: "summary" },
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
