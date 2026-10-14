@@ -1,8 +1,9 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { ArrowDown, ArrowUp, Loader2, MoreHorizontal, Plus, Search, Trash2 } from "lucide-react";
+import { ArrowDown, ArrowUp, Download, Loader2, MoreHorizontal, Plus, Search, Trash2, Upload } from "lucide-react";
 import { toast } from "sonner";
 
 import {
@@ -187,6 +188,19 @@ export function TableGrid({ table, companyAccess }: { table: TableSummary; compa
     window.addEventListener("mouseup", onUp);
   };
 
+  const exportUrl = useCallback(
+    (format: "csv" | "xlsx" | "json") => {
+      const params = new URLSearchParams({ format });
+      if (search) params.set("search", search);
+      if (sortKey) {
+        params.set("sortKey", sortKey);
+        params.set("sortDir", sortDir);
+      }
+      return `/api/tables/${current.id}/export?${params.toString()}`;
+    },
+    [current.id, search, sortKey, sortDir],
+  );
+
   const accessLabel = useMemo(() => {
     if (companyAccess === "suspended") return { text: "Suspended — no access", variant: "destructive" as const };
     if (companyAccess === "read_only") return { text: "Read only", variant: "secondary" as const };
@@ -236,6 +250,31 @@ export function TableGrid({ table, companyAccess }: { table: TableSummary; compa
             <Button variant="destructive" size="sm" disabled={busy === "delete"} onClick={handleDeleteSelected}>
               {busy === "delete" ? <Loader2 className="animate-spin" aria-hidden /> : <Trash2 aria-hidden />}
               Delete {selected.size} selected
+            </Button>
+          ) : null}
+          {access.export ? (
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="outline" size="sm">
+                  <Download aria-hidden /> Export
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end">
+                {(["csv", "xlsx", "json"] as const).map((fmt) => (
+                  <DropdownMenuItem key={fmt} asChild>
+                    <a href={exportUrl(fmt)} download>
+                      {fmt.toUpperCase()}
+                    </a>
+                  </DropdownMenuItem>
+                ))}
+              </DropdownMenuContent>
+            </DropdownMenu>
+          ) : null}
+          {(access.import || access.manage) && canWrite ? (
+            <Button asChild variant="outline" size="sm">
+              <Link href={`/tables/${current.id}/import`}>
+                <Upload aria-hidden /> Import
+              </Link>
             </Button>
           ) : null}
           {access.create && canWrite ? (

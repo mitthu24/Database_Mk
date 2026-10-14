@@ -154,4 +154,10 @@ export async function deleteRows(tableId: string, rowIds: string[]): Promise<{ o
   }
 }
 
+export async function listImportJobs(tableId: string) {
+  await requireUser();
+  const backend = await getBackend();
+  return backend.data.listImportJobs(tableId);
+}
+
 export type { ImportOutcome };

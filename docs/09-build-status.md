@@ -86,7 +86,39 @@ add-row control, matching the access flags the backend returned.
 Not yet in a committed Playwright suite (that is M9's job): the manual smoke
 run above is real browser evidence, not a regression test.
 
-## M3, M5-M9
+## M5 — Import / export
+
+Route Handlers (not Server Actions, so uploads are not bound by the 1 MB
+Server Action body cap): `GET /api/tables/[id]/export` streams CSV/XLSX/JSON
+page-by-page via `queryRows` after `authorizeExport()` succeeds (the
+server-side authorization gate, checked before any row is read; respects the
+grid's current search/sort so a filtered view exports what's on screen).
+`POST /api/tables/[id]/import/preview` and `.../import/commit` share
+`src/lib/import/request.ts`, which parses the multipart upload and re-runs
+`parseUpload` + `runPipeline` from scratch on the server — commit never
+trusts a client-echoed row list, it re-validates the same file again.
+`/tables/[id]/import`: file picker, live column-mapping editor, onError
+(reject/skip) and skip-duplicates toggles, replace-mode (manage-only), issue
+list, a 10-row sample, and an import-history table from `listImportJobs`.
+Export/Import buttons on the grid are gated by `access.export` /
+`access.import || access.manage`, matching the backend's own flags.
+
+Browser-verified against the mock backend (manual Playwright smoke script,
+same caveat as M4 — not yet a committed regression test): exported Orders
+(250 seeded rows) as CSV, JSON and XLSX and checked row counts and headers;
+imported a 2-row CSV into Vendors (append), saw it land in the grid and in
+import history; then re-ran the wizard with a row missing a required field
+and confirmed the UI blocks the import and shows why, with no "Import rows"
+button rendered.
+
+| Check | Unit | Local PG | Browser | Hosted Supabase | Preview | Prod |
+|---|---|---|---|---|---|---|
+| Export engine (CSV/XLSX/JSON, formula-injection sanitizer) | ✅ (pre-existing) | n/a | ✅ manual smoke (3 formats) | ❌ | ❌ | ❌ |
+| Import engine (parse/coerce/pipeline, zip guard) | ✅ (pre-existing) | n/a | ✅ manual smoke (preview+commit+blocked case) | ❌ | ❌ | ❌ |
+| `parseImportRequest` (multipart parsing + re-validation) | ✅ | - | ✅ (covered by the smoke run above) | - | - | - |
+| Route Handlers (auth gate, streaming, error mapping) | - | - | ✅ manual smoke | ❌ | ❌ | ❌ |
+
+## M3, M6-M9
 
 Not started. See `docs/08-milestones.md` for scope.
 
