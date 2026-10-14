@@ -145,7 +145,32 @@ same backend rules the SQL tests cover.
 | Employee actions (status/role/code/permissions, error mapping) | ✅ | n/a (SQL side covered in M2's suite) | ✅ manual smoke | ❌ | ❌ | ❌ |
 | Employee directory & permission-grid UI | - | - | ✅ manual smoke (grant takes effect for the employee) | ❌ | ❌ | ❌ |
 
-## M3, M7-M9
+## M7 — Subscription, trial and payments (company side)
+
+`/company/billing`: a status banner (trialing with days-left warning at <=7
+days, read-only on an expired trial or inactive subscription, suspended with
+no data access), the platform's payment instructions and support email
+(`getPlatformSettings()`), a submit-payment form (admin-only, hidden when
+the company is suspended — matching the backend rule that a suspended
+company cannot submit payments while an expired one can), and payment
+history (admin-only — `listPayments()` is itself founder/admin-scoped by the
+backend, so an employee is never asked to call it). `submitPayment` calls
+`revalidatePath` so the new payment appears in history immediately, no
+reload needed. Founder-side review/approval (`founder_review_payment`) is
+M3's job, not built yet.
+
+Browser-verified against the mock backend: Alice (Acme, trialing) saw the
+submit form and a newly submitted payment appear in her own history without
+a reload; Bob (Birch, expired trial) saw the read-only banner and could
+still submit a payment; Carol (Cedar, suspended) saw the suspended banner
+with no submit form at all.
+
+| Check | Unit | Local PG | Browser | Hosted Supabase | Preview | Prod |
+|---|---|---|---|---|---|---|
+| `submitPayment` validation + error mapping | ✅ | n/a (SQL side covered in M2's suite) | ✅ manual smoke | ❌ | ❌ | ❌ |
+| Billing page states (trial/read-only/suspended) & history | - | - | ✅ manual smoke (3 personas) | ❌ | ❌ | ❌ |
+
+## M3, M8-M9
 
 Not started. See `docs/08-milestones.md` for scope.
 

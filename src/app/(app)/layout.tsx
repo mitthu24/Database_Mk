@@ -45,6 +45,9 @@ async function AppFrame({ children }: { children: React.ReactNode }) {
                 <Button asChild variant="ghost" size="sm">
                   <Link href="/company">Company</Link>
                 </Button>
+                <Button asChild variant="ghost" size="sm">
+                  <Link href="/company/billing">Billing</Link>
+                </Button>
               </>
             ) : null}
             <Button asChild variant="ghost" size="sm">
