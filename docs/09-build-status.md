@@ -235,9 +235,64 @@ navigating, and `/sitemap.xml` / `/robots.txt` serving correctly.
 |---|---|---|---|---|---|---|
 | Marketing pages, mobile nav, sitemap/robots | n/a (no logic to unit-test) | n/a | ✅ manual smoke (desktop + mobile viewport) | ❌ | ❌ | ❌ |
 
-## M9
+## M9 — QA
 
-Not started. See `docs/08-milestones.md` for scope.
+A committed Playwright suite (`playwright.config.ts`, `tests/e2e/*.spec.ts`,
+`npm run test:e2e`) replaces the milestone-by-milestone manual smoke
+scripts: 48 scenarios × 3 viewport projects (mobile/Pixel 7, tablet/768×1024
+touch, desktop/1280×800) = 144 tests, covering auth, the table grid (CRUD,
+schema edits, clear/drop confirms, permission-gated UI, pagination/sort),
+employees/permissions, import/export, billing states, the founder console,
+and the marketing site + mobile nav. A dev-only reset endpoint
+(`POST /api/dev-reset-mock`, 404s unless `APP_BACKEND=mock`) gives each test
+a clean, deterministic seed. An `@axe-core/playwright` pass checks
+WCAG 2a/2aa on the marketing landing page, login, register, dashboard, the
+table grid and the founder console.
+
+Running this suite surfaced and fixed real bugs, not just test gaps:
+
+- **Color contrast**: light-mode `--muted-foreground` (4.47:1) and `--accent`
+  (3.97:1) were just under the WCAG AA 4.5:1 threshold. Darkened both
+  (`#475569` / `#217059`) with a safe margin; dark mode was already fine.
+- **Unlabelled controls**: several `Select` triggers (rows-per-page, column
+  type pickers, import column mapping, member role) relied on a visible
+  sibling label that wasn't programmatically associated, so screen readers
+  announced them with no name. Added `aria-label`/`aria-labelledby` to each.
+- **Unlabelled logo link on mobile**: the app header's logo link had its only
+  text inside a `hidden sm:inline` span, so on a phone the link had no
+  accessible name at all. Added an explicit `aria-label`.
+- **No mobile nav in the authenticated app shell**: the (app) header had no
+  responsive behaviour — on a phone its full button row overflowed and
+  (confirmed by full e2e runs) made links including Sign Out unreachable by
+  click. Added `src/components/app/mobile-nav.tsx` (a hamburger menu
+  matching the marketing site's pattern) and hid the desktop nav below `sm`.
+- **`next dev`'s HMR WebSocket is blocked by this sandbox's egress proxy**,
+  which silently breaks all client-side hydration (every button stops
+  responding, no console error, nothing in the DOM looks wrong) without
+  affecting a production build. Confirmed by direct DOM/event-handler
+  inspection before switching `playwright.config.ts`'s `webServer` to
+  `next build && next start`. This explains why some of the M4-M8 manual
+  smoke runs needed re-verification here under a production build instead.
+- **`devices["iPad Mini"]` defaults to WebKit** (not installed in this
+  sandbox, only Chromium), which made every tablet-project test fail with
+  an opaque browser-launch error. Replaced it with a Chromium project using
+  an iPad-sized viewport and touch emulation.
+- **Next.js treats any `_`-prefixed app-directory folder as private and
+  excludes it from routing.** `src/app/api/_dev/reset-mock/route.ts` was
+  silently unreachable (a generic 404) under that name; renamed the folder
+  to `dev-reset-mock`.
+
+| Check | Unit | Local PG | Browser | Hosted Supabase | Preview | Prod |
+|---|---|---|---|---|---|---|
+| Playwright suite (144 tests: 48 scenarios × mobile/tablet/desktop) | - | - | ✅ `npm run test:e2e`, all 144 passing | ❌ | ❌ | ❌ |
+| Accessibility (axe-core, WCAG 2a/2aa, 6 key pages) | - | - | ✅ all passing after the fixes above | ❌ | ❌ | ❌ |
+| Full gate re-run after M9 fixes (typecheck/lint/unit/build/SQL) | ✅ 336 unit tests | ✅ 444 SQL assertions | ✅ build produces the expected static/PPR/dynamic route table | ❌ | ❌ | ❌ |
+
+Not done: this suite runs against the mock backend only, as a production
+build served locally (`next build && next start`) - never against hosted
+Supabase, a Vercel preview, or production, and never against `next dev` in
+this sandbox (HMR is blocked here; a real developer machine would not have
+this problem running the normal `npm run dev` workflow).
 
 ## Known limitations / explicitly not done
 

@@ -9,6 +9,7 @@
     "lint": "eslint",
     "typecheck": "next typegen && tsc --noEmit",
     "test": "vitest run",
+    "test:e2e": "playwright test",
     "test:db": "bash scripts/test-db.sh",
     "test:cli-runner": "bash scripts/test-cli-runner.sh",
     "capture:contracts": "bash scripts/capture-contracts.sh"

@@ -17,6 +17,13 @@ export async function loginAs(page: Page, email: string, password = MOCK_PASSWOR
 }
 
 export async function signOut(page: Page) {
-  await page.locator('form[action] button:has-text("Sign out")').click();
+  const desktopButton = page.locator('nav[aria-label="Main"] form[action] button:has-text("Sign out")');
+  if (await desktopButton.isVisible()) {
+    await desktopButton.click();
+  } else {
+    // Mobile: the nav is collapsed behind the hamburger menu.
+    await page.click('button[aria-label="Open menu"]');
+    await page.locator('nav[aria-label="Mobile"] form[action] button:has-text("Sign out")').click();
+  }
   await page.waitForURL("**/login");
 }

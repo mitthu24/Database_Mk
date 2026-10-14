@@ -2,7 +2,7 @@ import { defineConfig, devices } from "@playwright/test";
 
 // Runs against the explicit dev/test mock backend only (APP_BACKEND=mock):
 // no hosted Supabase project is involved. Each spec resets the in-memory
-// store via /api/_dev/reset-mock (see tests/e2e/helpers.ts) so tests don't
+// store via /api/dev-reset-mock (see tests/e2e/helpers.ts) so tests don't
 // see each other's writes.
 const PORT = 3200;
 const baseURL = `http://127.0.0.1:${PORT}`;
@@ -21,7 +21,7 @@ export default defineConfig({
     // Pre-installed Chromium in this environment; playwright install is
     // unavailable, and its version does not match the devDependency's
     // expected revision.
-    launchOptions: { executablePath: "/opt/pw-browsers/chromium-1194/chrome-linux/chrome" },
+    launchOptions: { executablePath: "/opt/pw-browsers/chromium-1194/chrome-linux/chrome", args: ["--no-sandbox"] },
   },
   projects: [
     {
@@ -29,8 +29,12 @@ export default defineConfig({
       use: { ...devices["Pixel 7"] },
     },
     {
+      // Not devices["iPad Mini"]: that preset defaults to WebKit, which
+      // isn't installed in this sandbox (only Chromium is). An iPad-sized
+      // Chromium viewport with touch emulation covers the same responsive
+      // breakpoints.
       name: "tablet",
-      use: { ...devices["iPad Mini"] },
+      use: { ...devices["Desktop Chrome"], viewport: { width: 768, height: 1024 }, hasTouch: true, isMobile: false },
     },
     {
       name: "desktop",
