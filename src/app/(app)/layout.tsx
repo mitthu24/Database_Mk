@@ -37,6 +37,11 @@ async function AppFrame({ children }: { children: React.ReactNode }) {
                 <Button asChild variant="ghost" size="sm">
                   <Link href="/tables">Tables</Link>
                 </Button>
+                {ctx.role === "admin" ? (
+                  <Button asChild variant="ghost" size="sm">
+                    <Link href="/employees">Employees</Link>
+                  </Button>
+                ) : null}
                 <Button asChild variant="ghost" size="sm">
                   <Link href="/company">Company</Link>
                 </Button>

@@ -118,7 +118,34 @@ button rendered.
 | `parseImportRequest` (multipart parsing + re-validation) | ✅ | - | ✅ (covered by the smoke run above) | - | - | - |
 | Route Handlers (auth gate, streaming, error mapping) | - | - | ✅ manual smoke | ❌ | ❌ | ❌ |
 
-## M3, M6-M9
+## M6 — Employees and permissions
+
+`/employees` (admin-only): member list with role/status controls
+(`MemberRoleControl`, `MemberStatusControl` — status changes go through a
+confirm `AlertDialog`, both refuse to act on the signed-in admin's own row),
+employee code badge, an `AddEmployeeDialog` that invites via `authAdmin` +
+`add_company_member` (the existing `provisionEmployee`, unchanged), and a
+per-employee `PermissionsDialog`: a table-by-table grid of
+view/create/edit/delete/import/export checkboxes (any operation implies
+view; unchecking view clears the rest), saved per table via
+`setTablePermission`. All of it goes through `src/lib/employees/actions.ts`,
+thin wrappers over `DataPort` — the server re-verifies the caller is the
+company's admin and a company admin still cannot touch another company's
+members (enforced by the backend, not this UI).
+
+Browser-verified against the mock backend (manual Playwright smoke script):
+signed in as Acme's admin, opened the employee list (4 members), opened the
+permissions grid for an employee with no grants, checked "view" on one
+table, saved, then signed in as that employee and confirmed the table was
+now visible in their `/tables` list — the UI change took effect through the
+same backend rules the SQL tests cover.
+
+| Check | Unit | Local PG | Browser | Hosted Supabase | Preview | Prod |
+|---|---|---|---|---|---|---|
+| Employee actions (status/role/code/permissions, error mapping) | ✅ | n/a (SQL side covered in M2's suite) | ✅ manual smoke | ❌ | ❌ | ❌ |
+| Employee directory & permission-grid UI | - | - | ✅ manual smoke (grant takes effect for the employee) | ❌ | ❌ | ❌ |
+
+## M3, M7-M9
 
 Not started. See `docs/08-milestones.md` for scope.
 
