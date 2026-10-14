@@ -1,5 +1,6 @@
 import { Suspense } from "react";
 
+import { connection } from "next/server";
 import { PasswordForm } from "@/components/auth/password-form";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { requireUser } from "@/lib/auth/dal";
@@ -7,6 +8,7 @@ import { requireUser } from "@/lib/auth/dal";
 export const metadata = { title: "Change password" };
 
 async function PasswordContent() {
+  await connection();
   await requireUser();
 
   return (

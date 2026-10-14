@@ -14,7 +14,7 @@ const newPassword = z
   .min(10, "Use at least 10 characters.")
   .max(72, "Use at most 72 characters.");
 
-const personName = z
+export const personNameSchema = z
   .string()
   .trim()
   .min(2, "Enter at least 2 characters.")
@@ -26,18 +26,18 @@ export const loginSchema = z.object({
 });
 
 export const registerSchema = z.object({
-  fullName: personName,
-  companyName: personName,
+  fullName: personNameSchema,
+  companyName: personNameSchema,
   email,
   password: newPassword,
 });
 
 export const companySchema = z.object({
-  companyName: personName,
+  companyName: personNameSchema,
 });
 
 export const profileNameSchema = z.object({
-  fullName: personName,
+  fullName: personNameSchema,
 });
 
 const optionalText = (max: number, message: string) =>
@@ -47,7 +47,7 @@ const optionalText = (max: number, message: string) =>
   );
 
 export const companyProfileSchema = z.object({
-  name: personName,
+  name: personNameSchema,
   contactEmail: z.preprocess((v) => (v === null || v === undefined ? "" : v), z.union([email, z.literal("")])),
   phone: optionalText(40, "Use at most 40 characters."),
   address: optionalText(500, "Use at most 500 characters."),
@@ -80,7 +80,7 @@ export const resetPasswordSchema = z
 
 export const employeeSchema = z.object({
   email,
-  fullName: personName,
+  fullName: personNameSchema,
   employeeCode: z
     .string()
     .trim()

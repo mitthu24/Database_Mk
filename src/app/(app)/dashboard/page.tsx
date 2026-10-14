@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
+import { connection } from "next/server";
 import { Suspense } from "react";
 
 import { Badge } from "@/components/ui/badge";
@@ -39,6 +40,7 @@ function Banner({ ctx }: { ctx: AppContext }) {
 }
 
 async function DashboardContent() {
+  await connection();
   const ctx = await requireContext();
 
   if (!ctx.isFounder && !ctx.companyId) redirect("/onboarding");

@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
+import { connection } from "next/server";
 import { Suspense } from "react";
 import { Table2 } from "lucide-react";
 
@@ -20,6 +21,7 @@ function accessBadge(access: { view: boolean; manage: boolean }, companyAccess: 
 }
 
 async function TablesContent() {
+  await connection();
   const ctx = await requireContext();
   if (ctx.isFounder) redirect("/founder");
   if (!ctx.companyId) redirect("/onboarding");

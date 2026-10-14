@@ -1,5 +1,6 @@
 import { Suspense } from "react";
 
+import { connection } from "next/server";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { PaymentHistory } from "@/components/billing/payment-history";
@@ -45,6 +46,7 @@ function StatusBanner({
 }
 
 async function BillingContent() {
+  await connection();
   const ctx = await requireCompanyMember();
   const backend = await getBackend();
   const settings = await backend.data.getPlatformSettings();

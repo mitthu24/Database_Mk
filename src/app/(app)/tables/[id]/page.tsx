@@ -1,4 +1,5 @@
 import { notFound, redirect } from "next/navigation";
+import { connection } from "next/server";
 import { Suspense } from "react";
 
 import { Skeleton } from "@/components/ui/skeleton";
@@ -7,6 +8,7 @@ import { requireContext } from "@/lib/auth/dal";
 import { getBackend } from "@/lib/backend";
 
 async function TableDetail({ id }: { id: string }) {
+  await connection();
   const ctx = await requireContext();
   if (ctx.isFounder) redirect("/founder");
   if (!ctx.companyId) redirect("/onboarding");

@@ -1,4 +1,5 @@
 import { notFound, redirect } from "next/navigation";
+import { connection } from "next/server";
 import { Suspense } from "react";
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -11,6 +12,7 @@ import { getBackend } from "@/lib/backend";
 export const metadata = { title: "Import data" };
 
 async function ImportContent({ id }: { id: string }) {
+  await connection();
   const ctx = await requireContext();
   if (ctx.isFounder) redirect("/founder");
   if (!ctx.companyId) redirect("/onboarding");

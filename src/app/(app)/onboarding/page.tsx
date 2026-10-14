@@ -1,4 +1,5 @@
 import { redirect } from "next/navigation";
+import { connection } from "next/server";
 import { Suspense } from "react";
 
 import { CompanyForm } from "@/components/auth/company-form";
@@ -8,6 +9,7 @@ import { getAuthUser, requireContext } from "@/lib/auth/dal";
 export const metadata = { title: "Create your company" };
 
 async function OnboardingContent() {
+  await connection();
   const ctx = await requireContext();
   if (ctx.isFounder || ctx.companyId) redirect("/dashboard");
 

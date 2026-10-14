@@ -1,4 +1,5 @@
 import { redirect } from "next/navigation";
+import { connection } from "next/server";
 import { Suspense } from "react";
 
 import { Badge } from "@/components/ui/badge";
@@ -13,6 +14,7 @@ import { getBackend } from "@/lib/backend";
 export const metadata = { title: "Employees" };
 
 async function EmployeesContent() {
+  await connection();
   const ctx = await requireContext();
   if (ctx.isFounder) redirect("/founder");
   if (!ctx.companyId) redirect("/onboarding");

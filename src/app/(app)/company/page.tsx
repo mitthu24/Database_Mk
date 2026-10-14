@@ -1,4 +1,5 @@
 import { redirect } from "next/navigation";
+import { connection } from "next/server";
 import { Suspense } from "react";
 
 import { CompanyProfileForm } from "@/components/company/company-profile-form";
@@ -9,6 +10,7 @@ import { getBackend } from "@/lib/backend";
 export const metadata = { title: "Company profile" };
 
 async function CompanyContent() {
+  await connection();
   const ctx = await requireContext();
   if (ctx.isFounder || !ctx.companyId) redirect("/dashboard");
 

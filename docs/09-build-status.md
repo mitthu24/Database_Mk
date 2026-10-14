@@ -170,7 +170,50 @@ with no submit form at all.
 | `submitPayment` validation + error mapping | ✅ | n/a (SQL side covered in M2's suite) | ✅ manual smoke | ❌ | ❌ | ❌ |
 | Billing page states (trial/read-only/suspended) & history | - | - | ✅ manual smoke (3 personas) | ❌ | ❌ | ❌ |
 
-## M3, M8-M9
+## M3 — Founder Super Admin
+
+`/founder`: overview dashboard (company/member/table/row totals, trial/paid/
+expired/suspended breakdown, trials ending ≤7 days, a dependency-free SVG bar
+chart for signups by month, and approved-payments-last-30-days). `/founder/
+companies`: searchable, state-filtered, paginated directory; detail page
+with profile, a `founderSetSubscription` override (trialing/past_due/
+canceled — never `active`, which only an approved payment can set), a
+confirmed suspend/re-activate control, members, and that company's payments.
+`/founder/payments`: platform-wide pending/approved/rejected tabs with
+approve/reject (reject requires a reason). `/founder/audit`: platform-wide,
+paginated. `/founder/settings`: payment instructions / support email / plan
+price text, the same values the company billing page reads. Company
+provisioning (`CreateCompanyDialog`) invites the admin via `authAdmin` and
+calls `founderCreateCompany`, deleting the invited user if company creation
+fails. All of it goes through `src/lib/founder/actions.ts` over `DataPort`;
+the backend is the actual authority (a company admin cannot reach any of
+this; `founderSetSubscription` itself refuses `"active"`).
+
+While building this milestone, every `(app)` page that reads per-request
+data (not just the new founder pages) was found to be missing the Next 16
+Cache Components dynamic marker — `next build` had been silently marking
+them `○` (static) instead of `◐` (partial prerender), and the mock backend's
+use of `new Date()` for entitlement checks surfaced it as a dev-time
+"unstable value" warning. Fixed by adding `await connection()` to the top of
+every `(app)` page's content component (16 files); confirmed with `next
+build` (all now render `◐`) and by watching the dev console show zero such
+warnings across a full click-through.
+
+Browser-verified against the mock backend (manual Playwright smoke script):
+filtered the company directory to "suspended" (1 match), opened a company's
+detail page, approved Birch's pending payment and confirmed its access
+flipped to `full` immediately (reading the real approval-math code path,
+not a stub), re-activated a suspended company, confirmed new audit entries
+appeared, saved a platform setting, and provisioned a brand-new company end
+to end (invite → create → redirect to its detail page with the right data).
+
+| Check | Unit | Local PG | Browser | Hosted Supabase | Preview | Prod |
+|---|---|---|---|---|---|---|
+| Founder actions (status/subscription/payment review/create-company/settings) | ✅ | n/a (SQL side covered in M2's suite) | ✅ manual smoke | ❌ | ❌ | ❌ |
+| Founder console pages (dashboard, companies, payments, audit, settings) | - | - | ✅ manual smoke (full click-through) | ❌ | ❌ | ❌ |
+| `await connection()` dynamic-rendering fix across all `(app)` pages | - | - | ✅ (`next build` route table + zero console warnings) | - | - | - |
+
+## M8-M9
 
 Not started. See `docs/08-milestones.md` for scope.
 

@@ -1,5 +1,6 @@
 import { Suspense } from "react";
 
+import { connection } from "next/server";
 import { ResetPasswordForm } from "@/components/auth/reset-password-form";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { requireUser } from "@/lib/auth/dal";
@@ -10,6 +11,7 @@ export const metadata = { title: "Set a new password" };
 // session at /auth/callback before redirecting here. No "current password" is
 // asked for: the link itself proves possession of the account.
 async function ResetContent() {
+  await connection();
   await requireUser();
 
   return (

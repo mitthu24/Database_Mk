@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { connection } from "next/server";
 import { Suspense } from "react";
 
 import { ProfileForm } from "@/components/account/profile-form";
@@ -9,6 +10,7 @@ import { getAuthUser, requireUser } from "@/lib/auth/dal";
 export const metadata = { title: "Account settings" };
 
 async function AccountContent() {
+  await connection();
   await requireUser();
   const user = await getAuthUser();
 
