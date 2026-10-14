@@ -56,7 +56,7 @@ async function CompaniesContent({ searchParams }: { searchParams: Promise<{ [key
       <form className="flex flex-wrap items-center gap-3" action="/founder/companies">
         <Input name="q" defaultValue={search} placeholder="Search by name or admin email…" className="max-w-xs" />
         <Select name="state" defaultValue={state}>
-          <SelectTrigger className="w-44">
+          <SelectTrigger className="w-44" aria-label="Filter by company state">
             <SelectValue />
           </SelectTrigger>
           <SelectContent>

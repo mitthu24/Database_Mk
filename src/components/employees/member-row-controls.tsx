@@ -40,7 +40,7 @@ export function MemberRoleControl({ member, disabled }: { member: Member; disabl
 
   return (
     <Select value={member.role} onValueChange={change} disabled={disabled || busy}>
-      <SelectTrigger size="sm" className="w-28">
+      <SelectTrigger size="sm" className="w-28" aria-label={`Role for ${member.fullName ?? member.email}`}>
         <SelectValue />
       </SelectTrigger>
       <SelectContent>

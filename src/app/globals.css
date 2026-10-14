@@ -17,9 +17,9 @@
   --secondary-foreground: #0f172a;
 
   --muted: #eef2f6;
-  --muted-foreground: #64748b;
+  --muted-foreground: #475569;
 
-  --accent: #2f8f6f;
+  --accent: #217059;
   --accent-foreground: #ffffff;
 
   --destructive: #dc2626;
@@ -27,7 +27,7 @@
 
   --border: #e2e7ee;
   --input: #e2e7ee;
-  --ring: #2f8f6f;
+  --ring: #217059;
 
   --radius: 0.625rem;
 }

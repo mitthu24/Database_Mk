@@ -146,7 +146,7 @@ export function ImportWizard({ tableId, columns, canReplace }: { tableId: string
                     {col.required ? <span className="text-destructive"> *</span> : null}
                   </span>
                   <Select value={mapping[col.key] === null || mapping[col.key] === undefined ? NONE : String(mapping[col.key])} onValueChange={(v) => updateMapping(col.key, v)}>
-                    <SelectTrigger size="sm" className="w-56">
+                    <SelectTrigger size="sm" className="w-56" aria-label={`File column for ${col.label}`}>
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>

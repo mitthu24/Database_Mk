@@ -99,7 +99,7 @@ export function CreateTableDialog() {
                     className="flex-1"
                   />
                   <Select value={col.type} onValueChange={(v) => update(i, { type: v as ColumnType })}>
-                    <SelectTrigger size="sm" className="w-36">
+                    <SelectTrigger size="sm" className="w-36" aria-label={`Type for ${col.label || `column ${i + 1}`}`}>
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>

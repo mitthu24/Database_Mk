@@ -407,9 +407,9 @@ export function TableGrid({ table, companyAccess }: { table: TableSummary; compa
 
           <div className="flex flex-wrap items-center justify-between gap-3 border-t px-3 py-2">
             <div className="flex items-center gap-2 text-sm text-muted-foreground">
-              <span>Rows per page</span>
+              <span id="page-size-label">Rows per page</span>
               <Select value={String(pageSize)} onValueChange={(v) => setQuery((q) => ({ ...q, pageSize: Number(v), page: 0 }))}>
-                <SelectTrigger size="sm" className="w-20">
+                <SelectTrigger size="sm" className="w-20" aria-labelledby="page-size-label">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>

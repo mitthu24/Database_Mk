@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Suspense } from "react";
+import { connection } from "next/server";
 import { Table2 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -10,6 +11,7 @@ import { getAuthUser, requireContext } from "@/lib/auth/dal";
 // shell can stream immediately (Cache Components). Each page ALSO verifies the
 // session through the DAL; this frame is not the security boundary.
 async function AppFrame({ children }: { children: React.ReactNode }) {
+  await connection();
   const ctx = await requireContext();
   const user = await getAuthUser();
 
