@@ -66,8 +66,8 @@ CLI version is used.
 ## Sequence of gates
 
 1. **GATE — Create/select a development Supabase project.** Never the
-   production project `evgwjbyrmuljrccgtedi` for this step. Record its ref
-   as `DEV_REF` and confirm `DEV_REF ≠ evgwjbyrmuljrccgtedi`. Full detail:
+   production project `ufaimiecbxjdnapjvjmd` for this step. Record its ref
+   as `DEV_REF` and confirm `DEV_REF ≠ ufaimiecbxjdnapjvjmd`. Full detail:
    `docs/m1-dev-deployment-procedure.md` §1.
 2. **Connect read-only first.** Verify any MCP/CLI connection is actually
    read-only by attempting a harmless write and confirming it's refused —

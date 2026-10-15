@@ -1,6 +1,6 @@
 # M1 validation and pre-deployment checkpoint
 
-Scope: audit of the draft M1 migrations, rollback, auth/authorization code and deployment configuration. **Nothing was applied, created or deployed.** The Supabase project `evgwjbyrmuljrccgtedi` is still unreachable from the build environment (egress proxy rejects `supabase.com`, `mcp.supabase.com` and the project host; no Supabase MCP entry exists), so **nothing is verified against live Supabase** and the migrations must not be called production-compatible.
+Scope: audit of the draft M1 migrations, rollback, auth/authorization code and deployment configuration. **Nothing was applied, created or deployed.** The Supabase project `ufaimiecbxjdnapjvjmd` is still unreachable from the build environment (egress proxy rejects `supabase.com`, `mcp.supabase.com` and the project host; no Supabase MCP entry exists), so **nothing is verified against live Supabase** and the migrations must not be called production-compatible.
 
 Approved product defaults applied: expired trials read-only (view + export, all writes rejected); one company per user; suspended companies get no data access; no production migration, founder creation or deployment.
 
@@ -80,7 +80,7 @@ Approved product defaults applied: expired trials read-only (view + export, all 
 - *None.* No connection to any Supabase project was possible.
 
 **Blocked by authentication / network**
-- Supabase MCP connection and project identity check for `evgwjbyrmuljrccgtedi` (egress proxy rejects Supabase hosts; no MCP entry; browser OAuth is yours to do)
+- Supabase MCP connection and project identity check for `ufaimiecbxjdnapjvjmd` (egress proxy rejects Supabase hosts; no MCP entry; browser OAuth is yours to do)
 - Live schema inspection and `docs/m1-live-schema-review.md`
 - Real Supabase Auth flows: signup, email confirmation, login, session refresh, logout, password change, invites
 - Real-database RLS tests, signup-trigger test, exposed-schema check, REST/GraphQL probes

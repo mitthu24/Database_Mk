@@ -257,7 +257,7 @@ re-reading. One concrete, useful gap was found and closed:
    project before touching production.
 3. Only after hosted dev verification passes, get explicit approval to
    repeat the procedure against the real production project
-   `evgwjbyrmuljrccgtedi`.
+   `ufaimiecbxjdnapjvjmd`.
 4. Follow `docs/12-vercel-deployment-checklist.md` for the preview →
    production deployment sequence, including the required environment
    variables and the rollback procedure.

@@ -59,7 +59,7 @@ design.
 - **Preview**: Vercel preview deployments per branch/PR, pointed at a
   Supabase dev/staging project.
 - **Production**: Vercel production deployment, pointed at the production
-  Supabase project (`evgwjbyrmuljrccgtedi`).
+  Supabase project (`ufaimiecbxjdnapjvjmd`).
 
 ## Migrations
 

@@ -38,7 +38,7 @@ This repository currently has the foundation in place (M0 in
 
 **Not yet done, and blocked on external connections:**
 - No migrations have been applied to the live Supabase project
-  (`evgwjbyrmuljrccgtedi`) — this session's network policy currently blocks
+  (`ufaimiecbxjdnapjvjmd`) — this session's network policy currently blocks
   `supabase.com` and no Supabase MCP connector is attached. See
   `docs/02-technical-architecture.md` and `docs/07-backup-migration-rollback.md`.
 - No Vercel project link/deployment yet — no Vercel auth available in this

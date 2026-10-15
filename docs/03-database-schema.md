@@ -1,7 +1,7 @@
 # Database Schema & Storage Design
 
 > These are proposed tables, not yet applied. Before running any migration,
-> inspect the live project (`evgwjbyrmuljrccgtedi`) via Supabase MCP/CLI once
+> inspect the live project (`ufaimiecbxjdnapjvjmd`) via Supabase MCP/CLI once
 > that connection is available, and reconcile this design against whatever
 > already exists there.
 >

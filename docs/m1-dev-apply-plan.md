@@ -3,9 +3,9 @@
 Status: **nothing has been applied.** No auth users, founder, policies or test data exist anywhere. This document is the package you approve (or amend) before any write. Prepared at commit following `9ad4117` on `claude/optimistic-cerf-yd7cvu`.
 
 ## 1. Development project reference
-**Not verified — not provided.** No development project ref is documented in the repository, no Supabase MCP is connected, and the build environment's egress proxy rejects `supabase.com`, `mcp.supabase.com`, `api.supabase.com` and `*.supabase.co` (re-checked this session). The production project `evgwjbyrmuljrccgtedi` must not be used for any of this.
+**Not verified — not provided.** No development project ref is documented in the repository, no Supabase MCP is connected, and the build environment's egress proxy rejects `supabase.com`, `mcp.supabase.com`, `api.supabase.com` and `*.supabase.co` (re-checked this session). The production project `ufaimiecbxjdnapjvjmd` must not be used for any of this.
 
-I need from you: the 20-character ref of the dedicated development project (`DEV_REF`), plus confirmation it is **not** `evgwjbyrmuljrccgtedi`. If it does not exist yet: Dashboard → *New project*. Creating a project can be billable depending on your plan and how many projects the organization already has; check the dashboard's cost notice yourself before creating it. Branching is a separate, paid, production-linked feature and is not needed.
+I need from you: the 20-character ref of the dedicated development project (`DEV_REF`), plus confirmation it is **not** `ufaimiecbxjdnapjvjmd`. If it does not exist yet: Dashboard → *New project*. Creating a project can be billable depending on your plan and how many projects the organization already has; check the dashboard's cost notice yourself before creating it. Branching is a separate, paid, production-linked feature and is not needed.
 
 ## 2. Existing schema summary
 **Unknown — inspection blocked.** Nothing about the live schema, auth settings, triggers, grants or policies has been read. Run `docs/m1-live-inspection-queries.sql` (SELECT-only) on the dev project and I will write `docs/m1-live-schema-review.md` from the results. Expectation for a brand-new project (to be confirmed, not assumed): only Supabase-managed schemas, empty `public`, no `private` schema, no migration history.

@@ -1,4 +1,4 @@
--- READ-ONLY inspection of the live Supabase project (evgwjbyrmuljrccgtedi).
+-- READ-ONLY inspection of the live Supabase project (ufaimiecbxjdnapjvjmd).
 -- Run in the Supabase SQL editor or through a read-only MCP session, and paste
 -- the RESULTS into docs/m1-live-schema-review.md. Every statement is a SELECT.
 -- No row contents are read from user tables: only catalog metadata and counts.

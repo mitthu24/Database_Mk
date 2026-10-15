@@ -3,7 +3,7 @@
 Goal: take the **unapplied** M1 migrations to a **dedicated development** Supabase project, prove they behave on real Supabase, and only then consider anything else. Nothing here touches production. Every step marked **GATE** needs your explicit written approval first.
 
 ## Ground rules
-- Production project `evgwjbyrmuljrccgtedi` is **read-only reference** until a separate production approval. Never link the CLI, MCP, or a Vercel preview to it during this procedure.
+- Production project `ufaimiecbxjdnapjvjmd` is **read-only reference** until a separate production approval. Never link the CLI, MCP, or a Vercel preview to it during this procedure.
 - Use a **separate development project** (or a throwaway one) with no real customer data. Supabase's own guidance is to connect AI tooling to development projects only.
 - No secret is ever pasted into chat. Keys live in `.env.local` (git-ignored) and in Vercel/Supabase secret stores.
 - Do not trust `read_only=true` on the MCP URL as a security control. The official `supabase/mcp` README says only that it "excludes mutating tools"; it names no database role and gives no guarantee. Verify (step 2) and approve tool calls manually.
@@ -11,7 +11,7 @@ Goal: take the **unapplied** M1 migrations to a **dedicated development** Supaba
 ## 1. Create or select the development project  — GATE (may incur cost)
 1. Dashboard → *New project* (e.g. `tdm-dev`), region near your users. A new project may be billable depending on your organization's plan: confirm before creating.
    - Supabase *branching* (preview branches of the production project) needs a paid plan and a GitHub-linked production project, and copies production schema; prefer a standalone dev project for M1.
-2. Record its 20-character **ref** (call it `DEV_REF`). Confirm `DEV_REF ≠ evgwjbyrmuljrccgtedi`.
+2. Record its 20-character **ref** (call it `DEV_REF`). Confirm `DEV_REF ≠ ufaimiecbxjdnapjvjmd`.
 3. Dashboard → Authentication → Providers → Email: **Confirm email = ON**, minimum password length **10**, enable leaked-password protection / CAPTCHA if your plan has it. Authentication → URL Configuration: Site URL `http://localhost:3000`; add redirect URLs `http://localhost:3000/auth/callback` and your Vercel *preview* URL pattern's `/auth/callback`.
 4. Project Settings → API → **Exposed schemas**: only `public` (and `graphql_public` if used). `private` must **not** be listed.
 
@@ -88,7 +88,7 @@ After step 6 passes, with your approval: create the user in Dashboard → Authen
 | `NEXT_PUBLIC_SUPABASE_ANON_KEY` | production anon key (later) | dev anon key | dev anon key |
 | `SUPABASE_SERVICE_ROLE_KEY` | production (later), *sensitive* | dev key, *sensitive* | dev key |
 | `NEXT_PUBLIC_SITE_URL` | `https://<prod domain>` (required) | optional (falls back to `VERCEL_URL`) | `http://localhost:3000` |
-| `PRODUCTION_SUPABASE_PROJECT_REF` | `evgwjbyrmuljrccgtedi` **only after verification** | same value | same value |
+| `PRODUCTION_SUPABASE_PROJECT_REF` | `ufaimiecbxjdnapjvjmd` **only after verification** | same value | same value |
 The app refuses to start against the wrong project: production needs the confirmed ref and an exact `https://<ref>.supabase.co` match; any other environment is rejected if its URL points at the production ref (unit-tested and exercised in a running server). Also enable Vercel *Deployment Protection* for previews, and keep `.vercel/` out of Git (already ignored). `vercel login` / `vercel link` must be done by you.
 
 ## 12. Promotion to production — separate approval, not part of this procedure

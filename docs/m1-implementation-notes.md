@@ -8,7 +8,7 @@ Branch `claude/optimistic-cerf-yd7cvu`. Last updated for the M1 preparation pass
 |---|---|
 | Migrations written (4 files + rollback) | Done, **not applied anywhere** |
 | Migrations tested | Yes — on a throwaway **local PostgreSQL 16** with a Supabase emulation harness (see `m1-validation-checkpoint.md` for the audit and results) |
-| Live Supabase project verified (`evgwjbyrmuljrccgtedi`) | **No — blocked** (see §2) |
+| Live Supabase project verified (`ufaimiecbxjdnapjvjmd`) | **No — blocked** (see §2) |
 | Live schema inspected / `m1-live-schema-review.md` | **Not done** — cannot be done without access; not fabricated |
 | Auth UI + server actions + route protection | Implemented; build, typecheck, lint, unit tests pass |
 | Auth flows exercised against real Supabase Auth | **No** (no network path to Supabase) |
@@ -18,7 +18,7 @@ Branch `claude/optimistic-cerf-yd7cvu`. Last updated for the M1 preparation pass
 ## 2. Blocker: Supabase is unreachable from the build environment
 
 - No Supabase MCP server is configured or connected in this session (`claude mcp list`, no `.mcp.json`).
-- The environment's egress proxy rejects `supabase.com`, `mcp.supabase.com` and `evgwjbyrmuljrccgtedi.supabase.co` (`connect_rejected`, organization policy).
+- The environment's egress proxy rejects `supabase.com`, `mcp.supabase.com` and `ufaimiecbxjdnapjvjmd.supabase.co` (`connect_rejected`, organization policy).
 - Consequence: project identity, existing schema, auth configuration, RLS and grants are all **unverified**. The migrations were written against the proposed design only.
 
 To unblock Phase 2:
@@ -136,14 +136,14 @@ RLS cannot tell "view" from "export": anyone with `can_view` can still page thro
 Each file is wrapped in `begin; … commit;` (a mid-file failure leaves nothing behind — tested). `data_rows.created_by` has no FK on purpose (an unindexed FK to `auth.users` would scan the largest table on user deletion). They are deliberately strict (no `or replace` / `if not exists`): a clash with an existing live object fails the migration instead of overwriting it. Migration 04 inserts one `profiles` row per existing auth user (additive; review the count from inspection query 13).
 
 ### Apply gate — all must be true before running anything (your approval required)
-1. Project identity verified (dashboard URL ref = `evgwjbyrmuljrccgtedi`).
+1. Project identity verified (dashboard URL ref = `ufaimiecbxjdnapjvjmd`).
 2. `docs/m1-live-inspection-queries.sql` results reviewed; name-collision queries empty (or migrations adapted).
 3. SQL of all four files reviewed by you; RLS/privilege section (§9) understood.
 4. Backup/snapshot taken (Dashboard → Database → Backups) and rollback understood.
 5. First apply to a **development/branch** project, not production.
 6. Your explicit "apply" instruction.
 
-Suggested workflow once approved: `supabase link --project-ref evgwjbyrmuljrccgtedi` → `supabase db push --dry-run` → review the plan → `supabase db push`.
+Suggested workflow once approved: `supabase link --project-ref ufaimiecbxjdnapjvjmd` → `supabase db push --dry-run` → review the plan → `supabase db push`.
 
 ### Rollback
 `set app.confirm_m1_rollback = 'yes';` then run the rollback script. It drops only M1 objects (plain `DROP`, one transaction, no `CASCADE`), destroys M1 data, and leaves `auth.users` alone. Tested locally: refuses without the setting; removes exactly the M1 objects.

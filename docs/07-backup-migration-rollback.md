@@ -15,7 +15,7 @@
 ## Environments & promotion
 
 ```
-local/dev project  →  staging/preview project  →  production project (evgwjbyrmuljrccgtedi)
+local/dev project  →  staging/preview project  →  production project (ufaimiecbxjdnapjvjmd)
 ```
 A migration is applied to dev first, exercised there, then promoted. No
 migration goes straight to production.
